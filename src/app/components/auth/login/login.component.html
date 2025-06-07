@@ -1,0 +1,83 @@
+<div class="w-full">
+  <h1 class="text-[25px] text-black font-[500] font-Poppins text-center py-2">
+    Đăng Nhập
+  </h1>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <label class="text-[16px] font-Poppins text-black" htmlFor="email">
+      Email
+    </label>
+    <input
+      type="email"
+      name="email"
+      id="email"
+      placeholder=""
+      formControlName="email"
+      [class.border-red-500]="email?.invalid && email?.touched"
+      class="w-full text-black bg-transparent border rounded h-[40px] px-2 outline-none mt-[0px] font-Poppins"
+    />
+    <div
+      class="text-red-500 text-sm mt-1"
+      *ngIf="email?.invalid && email?.touched"
+    >
+      <span *ngIf="email?.errors?.['required']">Please enter your email!</span>
+      <span *ngIf="email?.errors?.['email']">Invalid email!</span>
+    </div>
+
+    <div class="w-full mt-5 relative mb-1">
+      <label class="text-[16px] font-Poppins text-black" htmlFor="password">
+        Mật khẩu
+      </label>
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        name="password"
+        value=""
+        id="password"
+        placeholder=""
+        formControlName="password"
+        [class.border-red-500]="password?.invalid && password?.touched"
+        class="w-full text-black bg-transparent border rounded h-[40px] px-2 outline-none mt-[0px] font-Poppins"
+      />
+      <i
+        [ngClass]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+        (click)="togglePasswordVisibility()"
+        class="fa fa-eye absolute bottom-3 right-2 z-10 cursor-pointer text-black"
+        aria-hidden="true"
+      ></i>
+      <div
+        class="text-red-500 text-sm mt-1"
+        *ngIf="password?.invalid && password?.touched"
+      >
+        <span *ngIf="password?.errors?.['required']"
+          >Please enter your password!</span
+        >
+        <span *ngIf="password?.errors?.['minlength']"
+          >Password must be at least 6 characters!</span
+        >
+      </div>
+    </div>
+    <div class="w-full mt-5">
+      <input
+        type="submit"
+        value="Đăng nhập"
+        class="flex flex-row justify-center items-center py-3 px-6 rounded-full cursor-pointer bg-[#00DC5A] min-h-[45px] w-full text-[16px] font-Poppins font-semibold hover:bg-[#11ff74] text-white"
+      />
+    </div>
+
+    <h5 class="text-center pt-4 font-Poppins text-[14px] text-black">
+      Chưa có tài khoản?
+      <span
+        class="text-[#1cc749] pl-1 cursor-pointer"
+        (click)="closeLoginModel(); openSignUpModel()"
+      >
+        Đăng Ký
+      </span>
+    </h5>
+  </form>
+
+  <div
+    class="absolute top-[-15px] right-[-15px] w-[35px] h-[35px] rounded-full bg-[#e0e0e0] hover:bg-[#d3d3d3] text-[#636363] flex items-center justify-center cursor-pointer"
+    (click)="closeLoginModel()"
+  >
+    <i class="fa fa-times text-[25px]" aria-hidden="true"></i>
+  </div>
+</div>

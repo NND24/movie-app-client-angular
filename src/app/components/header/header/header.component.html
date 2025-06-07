@@ -1,0 +1,124 @@
+<header class="w-full relative">
+  <div
+    class="fixed top-0 left-0 w-full h-[50px] sm:h-[60px] z-[1000] transition duration-500 ease-in-out bg-[#0a0c0f]"
+  >
+    <div class="w-[95%] 800px:w-[92%] m-auto h-full">
+      <div
+        class="w-full h-[50px] sm:h-[60px] flex items-center justify-between p-3"
+      >
+        <div class="flex items-center gap-[20px]">
+          <a
+            routerLink="/"
+            class="text-[25px] leading-none font-Poppins font-bold drop-shadow-[1px_1px_1px_#000] text-[#00dc5a] pb-[6px]"
+          >
+            dMovie
+          </a>
+
+          <app-nav-items />
+        </div>
+
+        <div class="flex items-center">
+          <div class="w-[240px] h-[36px] relative hidden sm:flex rounded-[4px]">
+            <input
+              type="search"
+              class="w-full h-full pr-[40px] pl-[12px] rounded-[4px] bg-[#bebebe42] text-white size-[14px] overflow-hidden whitespace-nowrap text-ellipsis outline-none"
+              autoComplete="off"
+              placeholder="Tìm kiếm..."
+            />
+            <i
+              class="fa fa-search text-[#d8d2d1] !text-[20px] absolute right-[10px] top-[8px] flex align-center justify-center cursor-pointer"
+            ></i>
+          </div>
+
+          @if(user) {
+          <div class="flex items-center gap-3">
+            <div class="relative ml-4">
+              <img
+                src="../../public/defaultAvatar.png"
+                alt="avatar"
+                class="w-[30px] h-[30px] object-cover rounded-full cursor-pointer"
+                (click)="toggleModel()"
+              />
+
+              @if(openModel) {
+              <i
+                class="fa fa-sort-asc absolute top-[32px] left-[8px] text-[#00dc5a]"
+              ></i>
+
+              <ul
+                class="absolute top-[39px] right-[-50px] w-[220px] sm:w-[250px] py-1 bg-[#1a191f] flex flex-col"
+              >
+                <a
+                  routerLink="/lich-su"
+                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
+                >
+                  <i class="fa fa-history"></i>
+                  <span>Lịch sử xem phim</span>
+                </a>
+                <a
+                  routerLink="/theo-doi"
+                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
+                >
+                  <i class="fa fa-bookmark"></i>
+                  <span>Phim đã lưu</span>
+                </a>
+                <a
+                  routerLink="/trang-ca-nhan"
+                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
+                >
+                  <i class="fa fa-user"></i>
+                  <span> Tài khoản của tôi</span>
+                </a>
+                <div
+                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633] cursor-pointer"
+                >
+                  <i class="fa fa-sign-out"></i>
+                  <span>Đăng xuất</span>
+                </div>
+              </ul>
+              }
+            </div>
+            <div class="block md:hidden">
+              <i class="fa fa-bars !text-[20px] text-white cursor-pointer"></i>
+            </div>
+          </div>
+          } @else {
+          <div class="flex items-center gap-1">
+            <i
+              class="fa fa-user !text-[20px] mx-4 text-white hover:text-[#00dc5a] cursor-pointer"
+              (click)="onToggleLogin(true)"
+            ></i>
+            <div class="block md:hidden">
+              <i class="fa fa-bars !text-[20px] text-white cursor-pointer"></i>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div
+  class="fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[85%] sm:w-[500px] bg-[#f8f8f8] rounded-[8px] shadow p-4 outline-none z-[2000]"
+  *ngIf="openLogin"
+>
+  <app-login
+    (closeLoginEvent)="onToggleLogin($event)"
+    (openSignUpEvent)="onToggleSignUp($event)"
+  />
+</div>
+
+<div
+  class="fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[85%] sm:w-[500px] bg-[#f8f8f8] rounded-[8px] shadow p-4 outline-none z-[2000]"
+  *ngIf="openSignUp"
+>
+  <app-sign-up
+    (openLoginEvent)="onToggleLogin($event)"
+    (closeSignUpEvent)="onToggleSignUp($event)"
+  />
+</div>
+
+<!-- <div>
+        <app-sidebar />
+      </div> -->
