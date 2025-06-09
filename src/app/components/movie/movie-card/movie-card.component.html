@@ -1,1 +1,113 @@
-<p>movie-card works!</p>
+<div
+  *ngIf="movie"
+  [ngClass]="{ 'transform scale-105': isHovered }"
+  class="bg-[#111319] cursor-pointer transition-transform duration-300"
+  (mouseenter)="handleMouseEnter()"
+  (mouseleave)="handleMouseLeave()"
+>
+  <ng-container *ngIf="isHovered; else normalView">
+    <div class="bg-[#1b1e27] rounded-[4px] overflow-hidden">
+      <div
+        class="rounded-[4px] overflow-hidden relative transition-all max-h-[120px] duration-300"
+      >
+        <a [routerLink]="['/phim', slug]">
+          <img
+            [src]="movie.poster_url"
+            [alt]="movie.name"
+            class="object-cover w-full h-[120px] transition-opacity duration-300 bg-[#303030bb] font-bold text-white"
+          />
+        </a>
+        <div
+          class="absolute top-[90px] right-[5px] flex justify-start gap-[10px]"
+        >
+          <a
+            [routerLink]="['/phim', slug]"
+            class="w-[26px] h-[26px] rounded-full bg-[#1cc749] hover:bg-[#3bf56d] flex items-center justify-center transition-colors duration-300"
+          >
+            <i class="fa fa-play text-white text-[11px]" aria-hidden="true"></i>
+          </a>
+          <button
+            class="w-[26px] h-[26px] rounded-full bg-[#e4e0d9] hover:bg-[#ffffff] flex items-center justify-center transition-colors duration-300"
+            (click)="addToFollowed()"
+          >
+            <i
+              class="fa fa-bookmark text-[#111319] text-[16px]"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+      </div>
+      <a [routerLink]="['/phim', slug]" class="p-2 block">
+        <h5
+          class="text-[14px] font-bold w-full text-left text-white line-clamp-2 h-[41px] transition-all duration-300 drop-shadow-[1px_1px_1px_#000]"
+        >
+          {{ movie.name }}
+        </h5>
+        <div
+          class="text-[13px] text-[#e0e0e0] text-left drop-shadow-[1px_1px_1px_#000] my-1 flex items-center"
+        >
+          <div class="mr-[4px] font-medium inline-flex items-center gap-1">
+            <i class="fa fa-star text-[#1cc749]" aria-hidden="true"></i>
+            <span>{{ movie.tmdb.vote_average }}</span>
+          </div>
+          <span class="mr-[4px]">•</span>
+          <a
+            [routerLink]="['/danh-sach/phim-moi']"
+            [queryParams]="{ page: 1, year: movie.year }"
+            class="mr-[4px] font-medium"
+          >
+            {{ movie.year }}
+          </a>
+          <span class="mr-[4px]">•</span>
+          <div class="mr-[4px] font-medium inline-flex items-center gap-1">
+            <i class="fa fa-eye" aria-hidden="true"></i>
+            <span>{{ movie.view }}</span>
+          </div>
+        </div>
+        <p
+          *ngIf="movie.content.length > 0"
+          class="line-clamp-4 text-justify mt-[12px] text-white text-[12px] h-[71px] transition-all duration-300"
+        >
+          {{ movie.content | removeHtmlTags }}
+        </p>
+        <p
+          class="text-[#00dc5a] flex text-[12px] items-center justify-end pt-2"
+        >
+          Chi tiết <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </p>
+      </a>
+    </div>
+  </ng-container>
+
+  <ng-template #normalView>
+    <a [routerLink]="['/phim', slug]">
+      <div class="relative transition-all duration-300">
+        <img
+          [src]="movie.thumb_url"
+          [alt]="movie.name"
+          class="object-cover w-full max-h-[200px] mobile-m:max-h-[230px] mobile-xl:max-h-[250px] sm:max-h-[280px] h-[200px] mobile-m:h-[230px] mobile-xl:h-[250px] sm:h-[280px] transition-opacity duration-300 rounded-[4px] font-bold text-white"
+        />
+        <div
+          class="absolute bottom-0 left-0 right-0 z-[300] h-[60px]"
+          style="
+            background-image: linear-gradient(
+              0deg,
+              rgba(10, 12, 15, 0.8) 0%,
+              rgba(10, 12, 15, 0.74) 4%,
+              rgba(10, 12, 15, 0.59) 17%,
+              rgba(10, 12, 15, 0.4) 34%,
+              rgba(10, 12, 15, 0.21) 55%,
+              rgba(10, 12, 15, 0.06) 78%,
+              rgba(10, 12, 15, 0) 100%
+            );
+          "
+        ></div>
+      </div>
+      <p
+        class="text-white text-[16px] text-left line-clamp-1 pt-2 hover:text-[#00dc5a] transition-all duration-300"
+      >
+        {{ movie.name }}
+      </p>
+    </a>
+  </ng-template>
+</div>

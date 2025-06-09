@@ -1,4 +1,92 @@
-<div>
-  <app-header />
-  <app-hero />
+<app-header />
+<app-hero [items]="movies" />
+
+<ng-container *ngFor="let q of catQueries | slice : 0 : visibleCategorySliders">
+  <ng-container *ngIf="q.data">
+    <app-movie-slider
+      [title]="q.data.titlePage || ''"
+      [slug]="q.data.type_list || ''"
+      [items]="q.data.items || []"
+    ></app-movie-slider>
+  </ng-container>
+</ng-container>
+
+<div class="text-center my-4">
+  <button
+    *ngIf="visibleCategorySliders < catQueries.length"
+    (click)="loadMoreCategorySliders()"
+    class="px-4 py-2 bg-[#23252b] text-white rounded-lg font-bold"
+  >
+    Xem Thêm
+  </button>
+  <button
+    *ngIf="visibleCategorySliders > initialSliders"
+    (click)="hideCategorySliders()"
+    class="px-4 py-2 bg-[#23252b] text-white rounded-lg font-bold ml-2"
+  >
+    Ẩn Bớt
+  </button>
 </div>
+
+<div class="w-[90%] mx-auto h-[1px] bg-[#26252a] my-2"></div>
+
+<ul
+  class="w-[90%] py-3 m-auto flex flex-wrap gap-[10px] text-white font-medium"
+>
+  <a
+    [routerLink]="['/danh-sach/phim-moi']"
+    [queryParams]="{ page: 1 }"
+    class="flex items-center h-[36px] px-[17px] bg-[#23252b] rounded-[4px] gap-2 cursor-pointer"
+  >
+    <i class="fa fa-clone" aria-hidden="true"></i>
+    <span>Phim mới</span>
+  </a>
+  <a
+    *ngFor="let nav of navItems"
+    [routerLink]="['/danh-sach/', nav.slug]"
+    [queryParams]="{ page: 1 }"
+    class="flex items-center h-[36px] px-[17px] bg-[#23252b] rounded-[4px] gap-2"
+  >
+    {{ nav.name }}
+  </a>
+
+  <a
+    *ngFor="let genre of genreItems"
+    [routerLink]="['//the-loai/', genre.slug]"
+    [queryParams]="{ page: 1 }"
+    class="hidden sm:flex items-center h-[36px] px-[17px] bg-[#23252b] rounded-[4px] gap-2"
+  >
+    {{ genre.name }}
+  </a>
+</ul>
+
+<div class="w-[90%] mx-auto h-[1px] bg-[#26252a] my-2"></div>
+
+<ng-container *ngFor="let q of genreQueries | slice : 0 : visibleGenreSliders">
+  <ng-container *ngIf="q.data">
+    <app-movie-slider
+      [title]="q.data.titlePage || ''"
+      [slug]="q.data.type_list || ''"
+      [items]="q.data.items || []"
+    ></app-movie-slider>
+  </ng-container>
+</ng-container>
+
+<div class="text-center my-4">
+  <button
+    *ngIf="visibleGenreSliders < genreQueries.length"
+    (click)="loadMoreGenreSliders()"
+    class="px-4 py-2 bg-[#23252b] text-white rounded-lg font-bold"
+  >
+    Xem Thêm
+  </button>
+  <button
+    *ngIf="visibleGenreSliders > initialSliders"
+    (click)="hideGenreSliders()"
+    class="px-4 py-2 bg-[#23252b] text-white rounded-lg font-bold ml-2"
+  >
+    Ẩn Bớt
+  </button>
+</div>
+
+<app-footer />

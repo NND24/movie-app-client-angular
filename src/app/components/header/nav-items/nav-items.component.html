@@ -13,7 +13,7 @@
       *ngIf="openCatModal"
       class="w-full py-1 px-2 bg-[#1a191f] grid grid-cols-2 sm:grid-cols-3 justify-items-center"
     >
-      <li *ngFor="let nav of navItemsData">
+      <li *ngFor="let nav of navItems">
         <a
           [routerLink]="['/danh-sach', nav.slug]"
           [queryParams]="{ page: 1 }"
@@ -38,7 +38,7 @@
       *ngIf="openGenreModal"
       class="w-full py-1 px-2 bg-[#1a191f] grid grid-cols-2 sm:grid-cols-3 justify-items-center"
     >
-      <li *ngFor="let genre of genreItemsData">
+      <li *ngFor="let genre of genreItems">
         <a
           [routerLink]="['/the-loai', genre.slug]"
           [queryParams]="{ page: 1 }"
@@ -63,7 +63,7 @@
       *ngIf="openNationModal"
       class="w-full py-1 px-2 bg-[#1a191f] grid grid-cols-2 sm:grid-cols-3 justify-items-center"
     >
-      <li *ngFor="let nation of nationItemsData">
+      <li *ngFor="let nation of nationItems">
         <a
           key="{index}"
           [routerLink]="['/quoc-gia', nation.slug]"
@@ -80,7 +80,7 @@
 <div class="hidden md:block">
   <div class="flex items-center gap-[15px]">
     <a
-      *ngFor="let nav of navItemsData.slice(0, 5)"
+      *ngFor="let nav of navItems.slice(0, 5)"
       [routerLink]="['/danh-sach', nav.slug]"
       [queryParams]="{ page: 1 }"
       class="hidden xl:block text-[17px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a]"
@@ -113,7 +113,7 @@
             0 0 20px rgba(0, 0, 0, 0.5);
         "
       >
-        <li *ngFor="let nav of navItemsData">
+        <li *ngFor="let nav of navItems">
           <a
             [routerLink]="['/danh-sach', nav.slug]"
             [queryParams]="{ page: 1 }"
@@ -151,7 +151,7 @@
             0 0 20px rgba(0, 0, 0, 0.5);
         "
       >
-        <li *ngFor="let genre of genreItemsData">
+        <li *ngFor="let genre of genreItems">
           <a
             [routerLink]="['/the-loai', genre.slug]"
             [queryParams]="{ page: 1 }"
@@ -189,7 +189,7 @@
             0 0 20px rgba(0, 0, 0, 0.5);
         "
       >
-        <li *ngFor="let nation of nationItemsData">
+        <li *ngFor="let nation of nationItems">
           <a
             [routerLink]="['/quoc-gia', nation.slug]"
             [queryParams]="{ page: 1 }"

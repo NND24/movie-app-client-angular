@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { MovieResponse } from '../models/IMovies';
+import {
+  DetailMovieResponse,
+  Movie,
+  MovieCategoryResponse,
+  MovieResponse,
+} from '../models/IMovies';
 
 @Injectable({
   providedIn: 'root',
@@ -23,31 +28,36 @@ export class MovieService {
     filterGenre: string,
     country: string,
     year: string
-  ) {
-    return this.http.get(
-      `${environment.movieApiUrl}/danh-sach/${category}?page=${page}&sort_field=${sortField}&category=${filterGenre}&country=${country}&year=${year}`
+  ): Observable<MovieCategoryResponse> {
+    return this.http.get<MovieCategoryResponse>(
+      `${environment.movieApiUrl}/v1/api/danh-sach/${category}?page=${page}&sort_field=${sortField}&category=${filterGenre}&country=${country}&year=${year}`
     );
   }
 
-  getMovieByGenre(genre: string, page: number) {
-    return this.http.get(
-      `${environment.movieApiUrl}/the-loai/${genre}?page=${page}`
+  getMovieByGenre(
+    genre: string,
+    page: number
+  ): Observable<MovieCategoryResponse> {
+    return this.http.get<MovieCategoryResponse>(
+      `${environment.movieApiUrl}/v1/api/the-loai/${genre}?page=${page}`
     );
   }
 
   getMovieByNation(nation: string, page: number) {
     return this.http.get(
-      `${environment.movieApiUrl}/quoc-gia/${nation}?page=${page}`
+      `${environment.movieApiUrl}/v1/api/quoc-gia/${nation}?page=${page}`
     );
   }
 
   getMovieBySearch(search: string, page: number) {
     return this.http.get(
-      `${environment.movieApiUrl}/tim-kiem?keyword=${search}&page=${page}`
+      `${environment.movieApiUrl}/v1/api/tim-kiem?keyword=${search}&page=${page}`
     );
   }
 
-  getDetailMovie(slug: string) {
-    return this.http.get(`${environment.movieApiUrl}phim/${slug}`);
+  getDetailMovie(slug: string): Observable<DetailMovieResponse> {
+    return this.http.get<DetailMovieResponse>(
+      `${environment.movieApiUrl}/phim/${slug}`
+    );
   }
 }

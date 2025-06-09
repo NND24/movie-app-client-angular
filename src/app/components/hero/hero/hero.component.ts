@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { DetailHeroComponent } from '../detail-hero/detail-hero.component';
 import { NgForOf } from '@angular/common';
 import { MovieService } from '../../../services/movie.service';
@@ -12,15 +12,7 @@ import { MovieService } from '../../../services/movie.service';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HeroComponent {
-  items: any[] = [];
+  @Input() items: any[] = [];
 
   constructor(private movieService: MovieService) {}
-
-  ngOnInit() {
-    this.movieService.getNewUpdatedMovie(1).subscribe({
-      next: (res) => {
-        this.items = res.items;
-      },
-    });
-  }
 }

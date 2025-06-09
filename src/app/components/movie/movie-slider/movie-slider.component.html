@@ -1,1 +1,20 @@
-<p>movie-slider works!</p>
+<div class="w-full relative">
+  <div class="w-[90%] m-auto py-3">
+    <a
+      [routerLink]="['/danh-sach', slug]"
+      [queryParams]="{ page: 1 }"
+      class="text-[22px] font-bold text-white leading-[45px]"
+    >
+      {{ title }}
+    </a>
+    <swiper-container
+      [navigation]="true"
+      class="movie-slider"
+      [breakpoints]="swiperBreakpoints"
+    >
+      <swiper-slide *ngFor="let movie of items">
+        <app-movie-card [slug]="movie.slug" />
+      </swiper-slide>
+    </swiper-container>
+  </div>
+</div>
