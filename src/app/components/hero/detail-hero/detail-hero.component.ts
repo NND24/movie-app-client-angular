@@ -8,7 +8,13 @@ import { RemoveHtmlTagsPipe } from '../../../pipes/remove-html-tags.pipe';
 @Component({
   selector: 'app-detail-hero',
   standalone: true,
-  imports: [RouterModule, NgIf, NgForOf, RemoveHtmlTagsPipe],
+  imports: [
+    RouterModule,
+    NgIf,
+    NgForOf,
+    RemoveHtmlTagsPipe,
+    DetailHeroComponent,
+  ],
   templateUrl: './detail-hero.component.html',
   styleUrl: './detail-hero.component.css',
 })

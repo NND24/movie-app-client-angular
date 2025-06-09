@@ -95,3 +95,8 @@ export interface DetailMovieResponse {
   movie: Movie;
   episodes: Episode[];
 }
+
+export interface HistoryMovie {
+  movie_slug: string;
+  lasted_ep: string;
+}

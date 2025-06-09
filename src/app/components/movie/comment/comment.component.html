@@ -1,1 +1,134 @@
-<p>comment works!</p>
+<div class="w-[90%] m-auto py-3">
+  <p
+    class="text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] text-[18px] font-semibold pb-2"
+  >
+    Bình luận:
+  </p>
+  <div>
+    <div class="flex items-center w-full">
+      @if(user) {
+      <textarea
+        cols="{40}"
+        rows="{2}"
+        placeholder="Viết bình luận..."
+        class="outline-none bg-transparent ml-3 border border-[#ffffff57] 800px:w-full p-2 rounded w-[90%] 800px:text-[18px] font-Poppins text-white flex-1"
+      ></textarea>
+      } @else {
+      <div
+        class="h-[66px] bg-transparent ml-3 border border-[#ffffff57] 800px:w-full p-2 rounded w-[90%] 800px:text-[18px] font-Poppins text-white flex-1"
+      >
+        <span>Vui lòng đăng nhập để bình luận</span>
+      </div>
+      }
+    </div>
+    @if(user) {
+    <div class="w-full flex justify-end">
+      <div
+        class="flex flex-row justify-center items-center py-3 px-6 rounded-full cursor-pointer bg-[#00DC5A] font-Poppins font-semibold !w-[80px] mobile-l:!w-[120px] !h-[35px] !min-h-[35px] mobile-l:!h-[40px] text-[18px] mt-5 text-white"
+        (click)="handleCommentSubmit()"
+      >
+        Gửi
+      </div>
+    </div>
+    }
+
+    <div class="w-full mb-2 mt-4">
+      <div *ngFor="let comment of data?.comments" class="mb-2">
+        <div class="flex mb-1">
+          <img
+            [src]="
+              comment?.user?.avatar
+                ? comment?.user?.avatar?.url
+                : '../../public/defaultAvatar.png'
+            "
+            alt="avatar"
+            class="w-[40px] h-[40px] object-cover rounded-full"
+          />
+          <div class="pl-3 text-white">
+            <h5 class="text-[20px]">{{ comment?.user?.name }}</h5>
+            <p>{{ comment?.comment }}</p>
+            <small class="text-[#ffffff83]" *ngIf="comment.createdAt">{{
+              comment?.createdAt
+            }}</small>
+            <button
+              *ngIf="user?._id === comment?.user?._id"
+              (click)="handleDeleteComment(comment._id)"
+              class="text-red-500 ml-2"
+            >
+              Xóa
+            </button>
+          </div>
+        </div>
+        <div class="flex w-full items-center ml-12">
+          <span
+            class="800px:pl-12 text-[#ffffff83] cursor-pointer mr-2"
+            (click)="toggleReplyActive(comment._id)"
+          >
+            @if(activeReply !== comment._id) { @if(comment.commentReplies.length
+            !== 0) { Tất cả phản hồi } @else { Phản hồi } } @else { Ẩn phản hồi
+            }
+          </span>
+          <i
+            class="fa fa-commenting-o cursor-pointer text-[20px] text-[#ffffff83]"
+            aria-hidden="true"
+          ></i>
+          <span class="pl-1 mt-[-4px] cursor-pointer text-[#ffffff83]">{{
+            comment?.commentReplies.length
+          }}</span>
+        </div>
+        <div class="ml-12" *ngIf="activeReply === comment._id">
+          <div
+            *ngFor="let item of comment.commentReplies"
+            class="w-full flex 800px:ml-16 my-5 text-white"
+          >
+            <div>
+              <img
+                [src]="
+                  item?.user?.avatar
+                    ? item?.user?.avatar?.url
+                    : '../../public/defaultAvatar.png'
+                "
+                alt="avatar"
+                class="w-[40px] h-[40px] object-cover rounded-full"
+              />
+            </div>
+            <div class="pl-3">
+              <div class="flex items-center">
+                <h5 class="text-[20px]">{{ item?.user?.name }}</h5>
+                <i
+                  *ngIf="item.user.role === 'admin'"
+                  class="fa fa-check-circle text-[#0095F6] ml-2 text-[20px]"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <p>{{ item?.comment }}</p>
+              <small class="text-[#ffffff83]">{{ item.createdAt }}</small>
+              <button
+                *ngIf="user?._id === item?.user?._id"
+                (click)="handleDeleteReply(comment._id, item._id)"
+                class="text-red-500 ml-2"
+              >
+                Xóa
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="user" class="w-full flex relative text-white">
+            <input
+              type="text"
+              placeholder="Nhập phản hồi..."
+              class="block 800px:ml-2 mt-2 outline-none bg-transparent border-b border-[#00000027] border-[#fff] text-white p-[5px] w-[95%]"
+            />
+            <button
+              type="submit"
+              class="absolute right-0 bottom-1"
+              (click)="handleAnswerSubmit()"
+            >
+              Gửi
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
