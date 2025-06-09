@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { NavItemsComponent } from '../nav-items/nav-items.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { LoginComponent } from '../../auth/login/login.component';
 import { SignUpComponent } from '../../auth/sign-up/sign-up.component';
 import { RouterModule } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +16,7 @@ import { NgIf } from '@angular/common';
     LoginComponent,
     SignUpComponent,
     NgIf,
+    NgClass,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
@@ -25,6 +26,8 @@ export class HeaderComponent {
   openModel: boolean = false;
   openLogin: boolean = false;
   openSignUp: boolean = false;
+  isProfile: boolean = false;
+  activeScroll: boolean = false;
 
   toggleModel() {
     this.openModel = !this.openModel;
@@ -36,5 +39,10 @@ export class HeaderComponent {
 
   onToggleSignUp(data: boolean) {
     this.openSignUp = data;
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.activeScroll = window.scrollY > 80;
   }
 }

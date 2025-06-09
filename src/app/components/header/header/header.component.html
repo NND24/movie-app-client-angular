@@ -1,6 +1,10 @@
 <header class="w-full relative">
   <div
-    class="fixed top-0 left-0 w-full h-[50px] sm:h-[60px] z-[1000] transition duration-500 ease-in-out bg-[#0a0c0f]"
+    [ngClass]="
+      activeScroll || isProfile
+        ? 'bg-[#0a0c0f] fixed top-0 left-0 w-full h-[50px] sm:h-[60px] z-[1000] transition duration-500 ease-in-out'
+        : 'w-full fixed top-0 left-0 h-[50px] sm:h-[60px] z-[1000]'
+    "
   >
     <div class="w-[95%] 800px:w-[92%] m-auto h-full">
       <div

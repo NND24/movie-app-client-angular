@@ -23,26 +23,28 @@
       <span *ngIf="email?.errors?.['email']">Invalid email!</span>
     </div>
 
-    <div class="w-full mt-5 relative mb-1">
+    <div class="w-full mt-5 mb-1">
       <label class="text-[16px] font-Poppins text-black" htmlFor="password">
         Mật khẩu
       </label>
-      <input
-        [type]="showPassword ? 'text' : 'password'"
-        name="password"
-        value=""
-        id="password"
-        placeholder=""
-        formControlName="password"
-        [class.border-red-500]="password?.invalid && password?.touched"
-        class="w-full text-black bg-transparent border rounded h-[40px] px-2 outline-none mt-[0px] font-Poppins"
-      />
-      <i
-        [ngClass]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
-        (click)="togglePasswordVisibility()"
-        class="fa fa-eye absolute bottom-3 right-2 z-10 cursor-pointer text-black"
-        aria-hidden="true"
-      ></i>
+      <div class="relative">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          name="password"
+          value=""
+          id="password"
+          placeholder=""
+          formControlName="password"
+          [class.border-red-500]="password?.invalid && password?.touched"
+          class="w-full text-black bg-transparent border rounded h-[40px] px-2 outline-none mt-[0px] font-Poppins"
+        />
+        <i
+          [ngClass]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+          (click)="togglePasswordVisibility()"
+          class="fa fa-eye absolute bottom-3 right-2 z-10 cursor-pointer text-black"
+          aria-hidden="true"
+        ></i>
+      </div>
       <div
         class="text-red-500 text-sm mt-1"
         *ngIf="password?.invalid && password?.touched"
@@ -56,11 +58,12 @@
       </div>
     </div>
     <div class="w-full mt-5">
-      <input
+      <button
         type="submit"
-        value="Đăng nhập"
         class="flex flex-row justify-center items-center py-3 px-6 rounded-full cursor-pointer bg-[#00DC5A] min-h-[45px] w-full text-[16px] font-Poppins font-semibold hover:bg-[#11ff74] text-white"
-      />
+      >
+        Đăng nhập
+      </button>
     </div>
 
     <h5 class="text-center pt-4 font-Poppins text-[14px] text-black">
