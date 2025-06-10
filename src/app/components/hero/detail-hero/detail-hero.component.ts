@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MovieService } from '../../../services/movie.service';
 import { Movie } from '../../../models/IMovies';
 import { RemoveHtmlTagsPipe } from '../../../pipes/remove-html-tags.pipe';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-detail-hero',
@@ -21,8 +22,12 @@ import { RemoveHtmlTagsPipe } from '../../../pipes/remove-html-tags.pipe';
 export class DetailHeroComponent {
   @Input() slug: string = '';
   movie!: Movie;
+  user: any;
 
-  constructor(private movieService: MovieService) {}
+  constructor(
+    private movieService: MovieService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     this.movieService.getDetailMovie(this.slug).subscribe({
@@ -30,7 +35,20 @@ export class DetailHeroComponent {
         this.movie = res.movie;
       },
     });
+
+    this.userService.user$.subscribe((data) => {
+      this.user = data;
+    });
   }
 
-  addToFollowed() {}
+  addToFollowed() {
+    if (this.user) {
+      this.userService.addMovieToFavorite(this.slug).subscribe((res: any) => {
+        localStorage.setItem('user', JSON.stringify(res));
+        this.userService.setUser(res.user);
+      });
+    } else {
+      console.log('Chưa đăng nhập');
+    }
+  }
 }

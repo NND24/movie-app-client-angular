@@ -40,6 +40,7 @@ export class WatchMovieComponent {
   separatedData!: Record<string, ServerData[]>;
   separatedEntries: { serverName: string; episodes: ServerData[] }[] = [];
   selectedEpisode?: ServerData;
+  user: any;
 
   watchedMovieItem = {
     watched_eps: [''],
@@ -71,11 +72,15 @@ export class WatchMovieComponent {
     });
 
     this.userService.user$.subscribe((data) => {
-      console.log(data);
-      if (data) {
+      if (data?.history) {
         this.watchedMovieItem = data?.history.find(
           (item: any) => item.movie_slug === this.slug
         );
+        if (!this.watchedMovieItem) {
+          this.watchedMovieItem = {
+            watched_eps: [''],
+          };
+        }
       } else {
         this.watchedMovieItem = {
           watched_eps: [''],
@@ -146,10 +151,21 @@ export class WatchMovieComponent {
         },
       });
     });
+
+    this.userService.user$.subscribe((data) => {
+      this.user = data;
+    });
   }
 
   addHistory(epName: string) {
-    console.log('Đã xem tập:', epName);
+    if (this.user) {
+      this.userService.addToHistory(this.slug, epName).subscribe((res: any) => {
+        localStorage.setItem('user', JSON.stringify(res));
+        this.userService.setUser(res.user);
+      });
+    } else {
+      console.log('Chưa đăng nhập');
+    }
   }
 
   setSelectedServer(server: string) {
