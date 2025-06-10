@@ -9,7 +9,12 @@ import {
   Movie,
   ServerData,
 } from '../../models/IMovies';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterModule,
+} from '@angular/router';
 import { RemoveHtmlTagsPipe } from '../../pipes/remove-html-tags.pipe';
 import { CommentComponent } from '../../components/movie/comment/comment.component';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
@@ -43,10 +48,17 @@ export class DetailMovieComponent {
 
   constructor(
     private movieService: MovieService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
     this.route.paramMap.subscribe((params) => {
       const slugParam = params.get('slug');
 

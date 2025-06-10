@@ -1,4 +1,9 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  Input,
+  ViewEncapsulation,
+} from '@angular/core';
 import { DetailHeroComponent } from '../detail-hero/detail-hero.component';
 import { NgForOf } from '@angular/common';
 import { MovieService } from '../../../services/movie.service';

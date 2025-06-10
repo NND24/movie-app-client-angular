@@ -36,36 +36,36 @@ input::-webkit-inner-spin-button {
   background-color: #00dc5a;
 }
 
-.swiper {
-  width: 100%;
-  height: 100%;
+.mySwiper .swiper {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center !important;
+  font-size: 18px !important;
+  background: #fff !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 
-.swiper-button-prev,
-.swiper-button-next {
+.mySwiper .swiper-button-prev,
+.mySwiper .swiper-button-next {
   color: white !important;
   font-weight: 700 !important;
 }
 
-.swiper-button-next {
-  text-shadow: -3px 0px 4px #000;
+.mySwiper .swiper-button-next {
+  text-shadow: -3px 0px 4px #000 !important;
 }
 
-.swiper-button-prev {
-  text-shadow: 3px 0px 4px #000;
+.mySwiper .swiper-button-prev {
+  text-shadow: 3px 0px 4px #000 !important;
 }
 
-.swiper-button-next:after,
-.swiper-button-prev:after {
+.mySwiper .swiper-button-next:after,
+.mySwiper .swiper-button-prev:after {
   font-size: 25px !important;
   font-weight: 700 !important;
 }
@@ -122,79 +122,79 @@ input::-webkit-inner-spin-button {
 }
 
 .movie-slider .swiper-button-next {
-  top: 38px;
-  right: 5%;
+  top: 38px !important;
+  right: 5% !important;
 }
 
 .movie-slider .swiper-button-prev {
-  top: 38px;
-  left: 91%;
+  top: 38px !important;
+  left: 91% !important;
 }
 
 @media (min-width: 1024px) {
   .movie-slider .swiper-button-prev {
-    top: 38px;
-    left: 90%;
+    top: 38px !important;
+    left: 90% !important;
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .movie-slider .swiper-button-next {
-    top: 38px;
-    right: 4%;
+    top: 38px !important;
+    right: 4% !important;
   }
 
   .movie-slider .swiper-button-prev {
-    top: 38px;
-    left: 89%;
+    top: 38px !important;
+    left: 89% !important;
   }
 }
 
 @media (min-width: 640px) and (max-width: 767px) {
   .movie-slider .swiper-button-next {
-    top: 38px;
-    right: 4%;
+    top: 38px !important;
+    right: 4% !important;
   }
 
   .movie-slider .swiper-button-prev {
-    top: 38px;
-    left: 88%;
+    top: 38px !important;
+    left: 88% !important;
   }
 }
 
 @media (min-width: 590px) and (max-width: 639px) {
   .movie-slider .swiper-button-next {
-    top: 38px;
-    right: 4%;
+    top: 38px !important;
+    right: 4% !important;
   }
 
   .movie-slider .swiper-button-prev {
-    top: 38px;
-    left: 87%;
+    top: 38px !important;
+    left: 87% !important;
   }
 }
 
 @media (min-width: 400px) and (max-width: 589px) {
   .movie-slider .swiper-button-next {
-    top: 38px;
-    right: 3%;
+    top: 38px !important;
+    right: 3% !important;
   }
 
   .movie-slider .swiper-button-prev {
-    top: 38px;
-    left: 86%;
+    top: 38px !important;
+    left: 86% !important;
   }
 }
 
 @media (min-width: 320px) and (max-width: 399px) {
   .movie-slider .swiper-button-next {
-    top: 38px;
-    right: 3%;
+    top: 38px !important;
+    right: 3% !important;
   }
 
   .movie-slider .swiper-button-prev {
-    top: 38px;
-    left: 82%;
+    top: 38px !important;
+    left: 82% !important;
   }
 }
 

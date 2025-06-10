@@ -3,11 +3,11 @@ import { HeaderComponent } from '../../components/header/header/header.component
 import { HeroComponent } from '../../components/hero/hero/hero.component';
 import { MovieService } from '../../services/movie.service';
 import { genreItemsData, navItemsData } from '../../constants/data';
-import { RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule, NgForOf, NgIf } from '@angular/common';
 import { MovieSliderComponent } from '../../components/movie/movie-slider/movie-slider.component';
 import { MovieCategoryResponse } from '../../models/IMovies';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { FooterComponent } from '../../components/footer/footer.component';
 
 @Component({
@@ -37,30 +37,46 @@ export class HomeComponent {
   catQueries: MovieCategoryResponse[] = [];
   genreQueries: MovieCategoryResponse[] = [];
 
-  constructor(private movieService: MovieService) {}
+  newUpdatedMovieSubscription!: Subscription;
+  movieByCategorySubscription!: Subscription;
+  movieByGenreSubscription!: Subscription;
+
+  constructor(private movieService: MovieService, private router: Router) {}
 
   ngOnInit() {
-    this.movieService.getNewUpdatedMovie(1).subscribe({
-      next: (res) => {
-        this.movies = res.items;
-      },
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
+
+    this.newUpdatedMovieSubscription = this.movieService
+      .getNewUpdatedMovie(1)
+      .subscribe({
+        next: (res) => {
+          this.movies = res.items;
+        },
+      });
 
     const navRequests = this.navItems.map((nav) =>
       this.movieService.getMovieByCategory(nav.slug, 1, '', '', '', '')
     );
 
-    forkJoin(navRequests).subscribe((results) => {
-      this.catQueries = results;
-    });
+    this.movieByCategorySubscription = forkJoin(navRequests).subscribe(
+      (results) => {
+        this.catQueries = results;
+      }
+    );
 
     const genreRequests = this.genreItems.map((genre) =>
       this.movieService.getMovieByGenre(genre.slug, 1)
     );
 
-    forkJoin(genreRequests).subscribe((results) => {
-      this.genreQueries = results;
-    });
+    this.movieByGenreSubscription = forkJoin(genreRequests).subscribe(
+      (results) => {
+        this.genreQueries = results;
+      }
+    );
   }
 
   loadMoreCategorySliders() {
@@ -77,5 +93,14 @@ export class HomeComponent {
 
   hideGenreSliders() {
     this.visibleGenreSliders = 2;
+  }
+
+  ngOnDestroy() {
+    this.newUpdatedMovieSubscription &&
+      this.newUpdatedMovieSubscription.unsubscribe();
+    this.movieByCategorySubscription &&
+      this.movieByCategorySubscription.unsubscribe();
+    this.movieByGenreSubscription &&
+      this.movieByGenreSubscription.unsubscribe();
   }
 }

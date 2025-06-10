@@ -43,14 +43,20 @@ export class MovieService {
     );
   }
 
-  getMovieByNation(nation: string, page: number) {
-    return this.http.get(
+  getMovieByNation(
+    nation: string,
+    page: number
+  ): Observable<MovieCategoryResponse> {
+    return this.http.get<MovieCategoryResponse>(
       `${environment.movieApiUrl}/v1/api/quoc-gia/${nation}?page=${page}`
     );
   }
 
-  getMovieBySearch(search: string, page: number) {
-    return this.http.get(
+  getMovieBySearch(
+    search: string,
+    page: number
+  ): Observable<MovieCategoryResponse> {
+    return this.http.get<MovieCategoryResponse>(
       `${environment.movieApiUrl}/v1/api/tim-kiem?keyword=${search}&page=${page}`
     );
   }

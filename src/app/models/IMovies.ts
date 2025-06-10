@@ -7,6 +7,7 @@ export interface MovieCategoryResponse {
     titlePage: string;
     type_list: string;
     items: any[];
+    params: any;
   };
   message: string;
   status: string;
