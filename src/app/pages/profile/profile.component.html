@@ -1,2 +1,7 @@
-<app-change-password *ngIf="editIfo; else changeProfile" />
-<ng-template #changeProfile><app-change-profile /></ng-template>
+<app-change-profile
+  (changeEvent)="handleSwitchPage($event)"
+  *ngIf="editInfo; else changePass"
+/>
+<ng-template #changePass
+  ><app-change-password (changeEvent)="handleSwitchPage($event)"
+/></ng-template>

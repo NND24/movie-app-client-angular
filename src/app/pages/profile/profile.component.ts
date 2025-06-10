@@ -11,5 +11,14 @@ import { NgIf } from '@angular/common';
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent {
-  editIfo: boolean = false;
+  editInfo: boolean = false;
+
+  handleSwitchPage(data: boolean) {
+    if (data) {
+      this.editInfo = true;
+    } else {
+      this.editInfo = false;
+    }
+    console.log(this.editInfo);
+  }
 }

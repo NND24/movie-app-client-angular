@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { HeaderComponent } from '../../header/header/header.component';
 import { NgIf } from '@angular/common';
 import { UserService } from '../../../services/user.service';
@@ -13,6 +13,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class ChangeProfileComponent {
   user: any;
+  @Output() changeEvent = new EventEmitter<boolean>(false);
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -26,5 +27,9 @@ export class ChangeProfileComponent {
     this.userService.user$.subscribe((data) => {
       this.user = data;
     });
+  }
+
+  switchPage() {
+    this.changeEvent.emit(false);
   }
 }
