@@ -3,8 +3,9 @@ import { NavItemsComponent } from '../nav-items/nav-items.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { LoginComponent } from '../../auth/login/login.component';
 import { SignUpComponent } from '../../auth/sign-up/sign-up.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,7 @@ import { NgClass, NgIf } from '@angular/common';
     SignUpComponent,
     NgIf,
     NgClass,
+    FormsModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
@@ -28,6 +30,9 @@ export class HeaderComponent {
   openSignUp: boolean = false;
   isProfile: boolean = false;
   activeScroll: boolean = false;
+  search: string = '';
+
+  constructor(private router: Router) {}
 
   toggleModel() {
     this.openModel = !this.openModel;
@@ -44,5 +49,13 @@ export class HeaderComponent {
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.activeScroll = window.scrollY > 80;
+  }
+
+  handleSearch() {
+    this.router.navigate(['/tim-kiem', this.search], {
+      queryParams: {
+        page: 1,
+      },
+    });
   }
 }

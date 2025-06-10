@@ -25,12 +25,15 @@
           <div class="w-[240px] h-[36px] relative hidden sm:flex rounded-[4px]">
             <input
               type="search"
+              [(ngModel)]="search"
               class="w-full h-full pr-[40px] pl-[12px] rounded-[4px] bg-[#bebebe42] text-white size-[14px] overflow-hidden whitespace-nowrap text-ellipsis outline-none"
               autoComplete="off"
               placeholder="Tìm kiếm..."
+              (keydown.enter)="handleSearch()"
             />
             <i
               class="fa fa-search text-[#d8d2d1] !text-[20px] absolute right-[10px] top-[8px] flex align-center justify-center cursor-pointer"
+              (click)="handleSearch()"
             ></i>
           </div>
 

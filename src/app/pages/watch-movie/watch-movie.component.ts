@@ -2,11 +2,17 @@ import { Component } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header/header.component';
 import { CommentComponent } from '../../components/movie/comment/comment.component';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterModule,
+} from '@angular/router';
 import { MoviePlayerComponent } from '../../components/movie/movie-player/movie-player.component';
 import { RemoveHtmlTagsPipe } from '../../pipes/remove-html-tags.pipe';
 import { DetailMovieResponse, Episode, ServerData } from '../../models/IMovies';
 import { MovieService } from '../../services/movie.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-watch-movie',
@@ -33,7 +39,6 @@ export class WatchMovieComponent {
   separatedData!: Record<string, ServerData[]>;
   separatedEntries: { serverName: string; episodes: ServerData[] }[] = [];
   selectedEpisode?: ServerData;
-  serverFromUrl: string = '1';
 
   watchedMovieItem = {
     watched_eps: ['1', '2'],
@@ -41,7 +46,9 @@ export class WatchMovieComponent {
 
   constructor(
     private movieService: MovieService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {}
 
   updateSelectedEpisode() {
@@ -55,14 +62,15 @@ export class WatchMovieComponent {
   }
 
   ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
     this.route.paramMap.subscribe((params) => {
       const slugParam = params.get('slug');
       const episodeParam = params.get('episode');
-      const serverNameFromUrl = params.get('server-name');
-      this.decodedServerName = serverNameFromUrl
-        ? decodeURIComponent(serverNameFromUrl)
-        : '';
-      this.serverFromUrl = params.get('server') || '1';
 
       if (slugParam && episodeParam) {
         this.slug = slugParam;
@@ -92,6 +100,37 @@ export class WatchMovieComponent {
         });
       }
     });
+
+    this.route.queryParamMap.subscribe((queryParams) => {
+      const serverNameFromUrl = queryParams.get('server-name');
+      this.decodedServerName = serverNameFromUrl
+        ? decodeURIComponent(serverNameFromUrl)
+        : '';
+      this.selectedServer = queryParams.get('server') || '1';
+
+      this.movieService.getDetailMovie(this.slug).subscribe({
+        next: (res) => {
+          this.movie = res;
+
+          this.separatedData = this.movie.episodes.reduce(
+            (acc: Record<string, ServerData[]>, server: Episode) => {
+              acc[server.server_name] = server.server_data;
+              return acc;
+            },
+            {} as Record<string, ServerData[]>
+          );
+
+          this.separatedEntries = Object.entries(this.separatedData).map(
+            ([serverName, episodes]) => ({ serverName, episodes })
+          );
+
+          this.updateSelectedEpisode();
+        },
+        error: (err) => {
+          console.error('Lỗi lấy chi tiết phim:', err);
+        },
+      });
+    });
   }
 
   addHistory(epName: string) {
@@ -102,5 +141,19 @@ export class WatchMovieComponent {
     this.selectedServer = server;
     this.decodedServerName = server;
     this.updateSelectedEpisode();
+  }
+
+  getSafeUrl(url: string): SafeResourceUrl {
+    const hasQuery = url.includes('?');
+    const finalUrl = hasQuery ? `${url}&autoplay=0` : `${url}?autoplay=0`;
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(finalUrl);
+  }
+
+  trackByServer(
+    index: number,
+    item: { serverName: string; episodes: ServerData[] }
+  ) {
+    return item.serverName;
   }
 }

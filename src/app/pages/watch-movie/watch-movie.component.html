@@ -23,16 +23,16 @@
     class="w-[90%] m-auto flex items-center justify-center pt-2"
     *ngIf="selectedEpisode"
   >
-    <div *ngIf="serverFromUrl === '1'; else elseBlock">
+    <div class="w-full" *ngIf="selectedServer === '1'; else server2">
       <iframe
-        [src]="selectedEpisode.link_embed + '?autoplay=1'"
+        [src]="getSafeUrl(selectedEpisode.link_embed)"
         class="h-[84vh] w-full"
         frameborder="0"
         allowfullscreen
         title="Video Player"
       ></iframe>
     </div>
-    <ng-template #elseBlock>
+    <ng-template #server2>
       <app-movie-player
         [videoSrc]="selectedEpisode.link_m3u8"
       ></app-movie-player>
@@ -66,7 +66,10 @@
   </div>
 
   <div class="w-[90%] m-auto pt-2" *ngIf="separatedData">
-    <div *ngFor="let entry of separatedEntries" class="py-3">
+    <div
+      *ngFor="let entry of separatedEntries; trackBy: trackByServer"
+      class="py-3"
+    >
       <p
         class="text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] text-[18px] font-semibold pb-2"
       >
@@ -81,13 +84,19 @@
           <a
             *ngFor="let e of entry.episodes"
             [routerLink]="['/phim', slug, e.name]"
-            [queryParams]="{ 'server-name': entry.serverName, server: 1 }"
+            [queryParams]="{
+              'server-name': entry.serverName,
+              server: selectedServer
+            }"
             (click)="addHistory(e.name)"
             [ngClass]="{
               'rounded-[4px] py-1 text-white font-semibold cursor-pointer text-center': true,
               '!bg-[#4a4a4aab]': watchedMovieItem.watched_eps.includes(e.name),
               'bg-[#0A0C0F]': !watchedMovieItem.watched_eps.includes(e.name),
-              'hover:bg-[#1cc749]': true
+              'hover:bg-[#1cc749]': true,
+              'bg-[#1cc749]':
+                selectedEpisode?.name === e.name &&
+                entry.serverName === decodedServerName
             }"
           >
             {{ e.name }}

@@ -10,7 +10,6 @@ import {
   RouterModule,
 } from '@angular/router';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
-import { NavItemsComponent } from '../../components/header/nav-items/nav-items.component';
 import {
   genreItemsData,
   nationItemsData,
