@@ -6,6 +6,8 @@ import { SignUpComponent } from '../../auth/sign-up/sign-up.component';
 import { Router, RouterModule } from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -24,7 +26,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  user = false;
+  user: any;
   openModel: boolean = false;
   openLogin: boolean = false;
   openSignUp: boolean = false;
@@ -32,7 +34,23 @@ export class HeaderComponent {
   activeScroll: boolean = false;
   search: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit() {
+    this.openModel = false;
+    this.userService.user$.subscribe((data) => {
+      this.user = data;
+    });
+
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.userService.setUser(JSON.parse(storedUser).user);
+    }
+  }
 
   toggleModel() {
     this.openModel = !this.openModel;
@@ -56,6 +74,13 @@ export class HeaderComponent {
       queryParams: {
         page: 1,
       },
+    });
+  }
+
+  handleLogout() {
+    this.authService.logout().subscribe((res) => {
+      this.userService.clearUser();
+      localStorage.removeItem('user');
     });
   }
 }

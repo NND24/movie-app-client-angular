@@ -13,6 +13,7 @@ import { RemoveHtmlTagsPipe } from '../../pipes/remove-html-tags.pipe';
 import { DetailMovieResponse, Episode, ServerData } from '../../models/IMovies';
 import { MovieService } from '../../services/movie.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-watch-movie',
@@ -41,14 +42,15 @@ export class WatchMovieComponent {
   selectedEpisode?: ServerData;
 
   watchedMovieItem = {
-    watched_eps: ['1', '2'],
+    watched_eps: [''],
   };
 
   constructor(
     private movieService: MovieService,
     private route: ActivatedRoute,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private userService: UserService
   ) {}
 
   updateSelectedEpisode() {
@@ -65,6 +67,19 @@ export class WatchMovieComponent {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    this.userService.user$.subscribe((data) => {
+      console.log(data);
+      if (data) {
+        this.watchedMovieItem = data?.history.find(
+          (item: any) => item.movie_slug === this.slug
+        );
+      } else {
+        this.watchedMovieItem = {
+          watched_eps: [''],
+        };
       }
     });
 

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 
@@ -24,6 +24,19 @@ export class AuthService {
   }
 
   logout() {
+    const tokenData = localStorage.getItem('user');
+
+    if (tokenData) {
+      const user = JSON.parse(tokenData);
+      const token = user.accessToken;
+
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+
+      return this.http.get(`${environment.apiUrl}/logout`, { headers });
+    }
+
     return this.http.get(`${environment.apiUrl}/logout`);
   }
 }

@@ -1,1 +1,48 @@
-<p>history works!</p>
+<app-header />
+
+<div
+  class="w-[90%] m-auto mt-[60px] flex items-center text-white font-semibold"
+>
+  <a [routerLink]="['/']" class="flex items-center gap-1 hover:text-[#1cc749]">
+    <i class="fa fa-home" aria-hidden="true"></i> <span>Trang chủ</span>
+  </a>
+  <span class="px-2">/</span>
+  <a [routerLink]="[]" class="flex items-center gap-1 hover:text-[#1cc749]">
+    <span>Lịch sử xem</span>
+  </a>
+</div>
+
+<ng-container *ngIf="user; else noUserData">
+  <div
+    *ngIf="user?.history?.length > 0; else noHistoryData"
+    class="w-[90%] m-auto grid grid-cols-12 gap-[35px] mt-2"
+  >
+    <div class="col-span-12">
+      <div
+        class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 sm:gap-[20px] grid-cols-2 gap-[5px]"
+      >
+        <div *ngFor="let movie of user?.history">
+          <app-history-movie-card
+            [slug]="movie?.movie_slug"
+            [lasted_ep]="movie.lasted_ep"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noHistoryData>
+    <div class="w-[90%] m-auto flex items-center justify-center h-[83vh]">
+      <span class="text-white font-bold text-[30px]">Chưa có phim đã xem</span>
+    </div>
+  </ng-template>
+</ng-container>
+<ng-template #noUserData>
+  <div class="w-[90%] m-auto flex items-center justify-center h-[83vh]">
+    <span class="text-white font-bold text-[30px]"
+      >Vui lòng đăng nhập để xem lịch sử xem phim</span
+    >
+  </div>
+</ng-template>
+
+<app-footer />

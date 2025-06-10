@@ -18,6 +18,7 @@ import {
 import { RemoveHtmlTagsPipe } from '../../pipes/remove-html-tags.pipe';
 import { CommentComponent } from '../../components/movie/comment/comment.component';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-detail-movie',
@@ -43,19 +44,33 @@ export class DetailMovieComponent {
   separatedEntries: { serverName: string; episodes: ServerData[] }[] = [];
 
   watchedMovieItem = {
-    watched_eps: ['1', '2'],
+    watched_eps: [''],
   };
 
   constructor(
     private movieService: MovieService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    this.userService.user$.subscribe((data) => {
+      console.log(data);
+      if (data) {
+        this.watchedMovieItem = data?.history.find(
+          (item: any) => item.movie_slug === this.slug
+        );
+      } else {
+        this.watchedMovieItem = {
+          watched_eps: [''],
+        };
       }
     });
 
@@ -68,8 +83,6 @@ export class DetailMovieComponent {
         this.movieService.getDetailMovie(this.slug).subscribe({
           next: (res) => {
             this.movie = res;
-
-            console.log(this.movie);
 
             this.separatedData = this.movie.episodes.reduce(
               (acc: Record<string, ServerData[]>, server: Episode) => {

@@ -26,6 +26,7 @@
     <div class="w-full" *ngIf="selectedServer === '1'; else server2">
       <iframe
         [src]="getSafeUrl(selectedEpisode.link_embed)"
+        [attr.key]="selectedEpisode.name"
         class="h-[84vh] w-full"
         frameborder="0"
         allowfullscreen

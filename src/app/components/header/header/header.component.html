@@ -37,11 +37,14 @@
             ></i>
           </div>
 
-          @if(user) {
-          <div class="flex items-center gap-3">
+          <div *ngIf="user; else noUserData" class="flex items-center gap-3">
             <div class="relative ml-4">
               <img
-                src="../../public/defaultAvatar.png"
+                [src]="
+                  user.avatar
+                    ? user.avatar.url
+                    : '../../../../assets/defaultAvatar.png'
+                "
                 alt="avatar"
                 class="w-[30px] h-[30px] object-cover rounded-full cursor-pointer"
                 (click)="toggleModel()"
@@ -78,6 +81,7 @@
                 </a>
                 <div
                   class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633] cursor-pointer"
+                  (click)="handleLogout()"
                 >
                   <i class="fa fa-sign-out"></i>
                   <span>Đăng xuất</span>
@@ -89,17 +93,20 @@
               <i class="fa fa-bars !text-[20px] text-white cursor-pointer"></i>
             </div>
           </div>
-          } @else {
-          <div class="flex items-center gap-1">
-            <i
-              class="fa fa-user !text-[20px] mx-4 text-white hover:text-[#00dc5a] cursor-pointer"
-              (click)="onToggleLogin(true)"
-            ></i>
-            <div class="block md:hidden">
-              <i class="fa fa-bars !text-[20px] text-white cursor-pointer"></i>
+
+          <ng-template #noUserData>
+            <div class="flex items-center gap-1">
+              <i
+                class="fa fa-user !text-[20px] mx-4 text-white hover:text-[#00dc5a] cursor-pointer"
+                (click)="onToggleLogin(true)"
+              ></i>
+              <div class="block md:hidden">
+                <i
+                  class="fa fa-bars !text-[20px] text-white cursor-pointer"
+                ></i>
+              </div>
             </div>
-          </div>
-          }
+          </ng-template>
         </div>
       </div>
     </div>

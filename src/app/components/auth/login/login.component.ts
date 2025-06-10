@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,11 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  constructor(private authService: AuthService, private fb: FormBuilder) {}
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private userService: UserService
+  ) {}
 
   @Output() closeLoginEvent = new EventEmitter<boolean>();
   @Output() openSignUpEvent = new EventEmitter<boolean>();
@@ -40,7 +45,7 @@ export class LoginComponent {
   ngOnInit() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required]],
     });
   }
 
@@ -62,8 +67,10 @@ export class LoginComponent {
     const password = this.loginForm.get('password')?.value ?? '';
 
     this.authService.login(email, password).subscribe({
-      next: (res) => {
-        console.log('Đăng nhập thành công: ', res);
+      next: (res: any) => {
+        localStorage.setItem('user', JSON.stringify(res));
+        this.userService.setUser(res.user);
+        this.closeLoginEvent.emit(false);
       },
     });
   }
