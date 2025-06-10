@@ -1,1 +1,2 @@
-<p>profile works!</p>
+<app-change-password *ngIf="editIfo; else changeProfile" />
+<ng-template #changeProfile><app-change-profile /></ng-template>

@@ -1,1 +1,69 @@
-<p>followed-movie-card works!</p>
+<div
+  class="relative bg-[#0A0C0F] cursor-pointer p-[6px] rounded-[4px]"
+  *ngIf="movie"
+>
+  <a [routerLink]="['/phim', slug]" class="group">
+    <div class="relative transition-all duration-300">
+      <img
+        [src]="movie.thumb_url"
+        [alt]="movie.name"
+        class="object-cover w-full max-h-[200px] mobile-m:max-h-[230px] mobile-xl:max-h-[280px] sm:max-h-[280px] h-[200px] mobile-m:h-[230px] mobile-xl:h-[280px] sm:h-[280px] transition-opacity duration-300 rounded-[4px] font-bold text-white z-0"
+      />
+      <div
+        class="absolute bottom-0 left-0 right-0 z-2 h-[60px]"
+        style="
+          background-image: linear-gradient(
+            0deg,
+            rgba(10, 12, 15, 0.8) 0%,
+            rgba(10, 12, 15, 0.74) 4%,
+            rgba(10, 12, 15, 0.59) 17%,
+            rgba(10, 12, 15, 0.4) 34%,
+            rgba(10, 12, 15, 0.21) 55%,
+            rgba(10, 12, 15, 0.06) 78%,
+            rgba(10, 12, 15, 0) 100%
+          );
+        "
+      ></div>
+
+      <div
+        class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-[4px] z-20 w-full h-full"
+      >
+        <div
+          class="w-[35px] h-[35px] bg-[#00dc5a] rounded-full flex items-center justify-center"
+        >
+          <i class="fa fa-play text-white text-lg" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+    <p
+      class="text-white text-[16px] text-left line-clamp-1 pt-2 hover:text-[#00dc5a] transition-all duration-300"
+    >
+      {{ movie.name }}
+    </p>
+  </a>
+
+  <div
+    class="absolute top-[6px] right-[6px] w-[22px] h-[22px] bg-[#0A0C0F] flex items-center justify-center z-30 hover:bg-[#1cc749]"
+    (click)="removeFromFollowed()"
+  >
+    <i
+      class="fa fa-times text-[20px] font-bold text-white"
+      aria-hidden="true"
+    ></i>
+  </div>
+
+  <div
+    class="absolute bottom-[45px] right-[10px] px-2 z-10 bg-[#1cc749] text-white font-semibold rounded-sm"
+  >
+    {{ movie.tmdb.vote_average }}
+  </div>
+
+  <div class="absolute top-[10px] left-[10px] z-10 flex gap-1">
+    <span class="px-2 bg-[#1cc749] text-white font-semibold rounded-sm">{{
+      movie.lang
+    }}</span>
+    <span class="px-2 bg-[#1cc749] text-white font-semibold rounded-sm">{{
+      movie.quality
+    }}</span>
+  </div>
+</div>
