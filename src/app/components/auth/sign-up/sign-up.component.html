@@ -55,7 +55,9 @@
           id="password"
           placeholder=""
           formControlName="password"
-          [class]="{ 'border-red-500': password?.invalid && password?.touched }"
+          [ngClass]="{
+            'border-red-500': password?.invalid && password?.touched
+          }"
           class="w-full text-black bg-transparent border rounded h-[40px] px-2 outline-none mt-[0px] font-Poppins"
         />
         <i
