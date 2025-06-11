@@ -1,27 +1,83 @@
-import { NgFor, NgForOf, NgIf } from '@angular/common';
+import { DatePipe, NgFor, NgForOf, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { User } from '../../../models/IUser';
+import { UserService } from '../../../services/user.service';
+import { FormsModule } from '@angular/forms';
+import { CommentService } from '../../../services/comment.service';
 
 @Component({
   selector: 'app-comment',
   standalone: true,
-  imports: [NgIf, NgForOf],
+  imports: [NgIf, NgForOf, FormsModule, DatePipe],
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.css',
 })
 export class CommentComponent {
   @Input() slug: string = '';
-  user!: User;
-  activeReply = 1;
-  data: any;
+  user: any;
+  activeReply: string = '';
+  comments: any;
+  comment: string = '';
+  reply: string = '';
 
-  handleCommentSubmit() {}
+  constructor(
+    private userService: UserService,
+    private commentService: CommentService
+  ) {}
 
-  handleAnswerSubmit() {}
+  ngOnInit() {
+    this.userService.user$.subscribe((data) => {
+      this.user = data;
+      console.log(this.user);
+    });
 
-  handleDeleteReply(commentId: string, itemId: string) {}
+    this.loadComments();
+  }
 
-  toggleReplyActive(commentId: string) {}
+  loadComments() {
+    this.commentService.getComment(this.slug).subscribe((res: any) => {
+      this.comments = res.comments;
+    });
+  }
 
-  handleDeleteComment(commentId: string) {}
+  handleCommentSubmit() {
+    this.commentService
+      .addNewComment(this.slug, this.comment)
+      .subscribe((res) => {
+        this.comment = '';
+        this.loadComments();
+      });
+  }
+
+  handleAnswerSubmit(commentId: string) {
+    this.commentService
+      .addNewAnswer(this.slug, this.reply, commentId)
+      .subscribe(() => {
+        this.reply = '';
+        this.loadComments();
+      });
+  }
+
+  handleDeleteReply(commentId: string, itemId: string) {
+    this.commentService
+      .deleteReply(this.slug, commentId, itemId)
+      .subscribe(() => {
+        this.loadComments();
+      });
+  }
+
+  toggleReplyActive(commentId: string) {
+    this.reply = '';
+    if (this.activeReply === commentId) {
+      this.activeReply = '';
+    } else {
+      this.activeReply = commentId;
+    }
+  }
+
+  handleDeleteComment(commentId: string) {
+    this.commentService.deleteComment(this.slug, commentId).subscribe(() => {
+      this.loadComments();
+    });
+  }
 }
