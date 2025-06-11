@@ -38,9 +38,10 @@
           type="file"
           id="avatar"
           class="hidden"
-          accept="image/jpg,image/png,image/jpeg,image/webp"
+          accept="image/*"
+          (change)="imageHandler($event)"
         />
-        <label htmlFor="avatar">
+        <label for="avatar">
           <div
             class="w-[32px] h-[32px] bg-[#e0e0e0] rounded-full absolute bottom-1 right-2 flex items-center justify-center cursor-pointer border-[1px] border-[#afafaf]"
           >
@@ -51,21 +52,40 @@
     </div>
 
     <div class="w-full pl-2 mobile-l:pl-4 sm:pl-5">
-      <form>
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
         <div class="m-auto block pb-4 text-[#fff]">
           <div class="w-full mb-4">
             <label class="block pb-2">Họ và tên</label>
             <input
               type="text"
+              formControlName="name"
+              name="name"
+              id="name"
+              [class.border-red-500]="
+                profileForm.get('name')?.invalid &&
+                profileForm.get('name')?.touched
+              "
               class="bg-transparent border rounded h-[40px] px-2 outline-none mt-[0px] font-Poppins !w-[95%] !text-[#fff]"
               required
             />
+            <div
+              class="text-red-500 text-sm mt-1"
+              *ngIf="
+                profileForm.get('name')?.invalid &&
+                profileForm.get('name')?.touched
+              "
+            >
+              <span *ngIf="profileForm.get('name')?.errors?.['required']"
+                >Please enter your name!</span
+              >
+            </div>
           </div>
           <div class="w-full pt-2">
             <label class="block pb-2">Email</label>
             <input
               type="text"
               readOnly
+              formControlName="email"
               class="bg-transparent border rounded h-[40px] px-2 outline-none mt-[0px] font-Poppins !w-[95%] !text-[#fff]"
               required
             />
