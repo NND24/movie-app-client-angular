@@ -6,6 +6,7 @@ import { Movie } from '../../../models/IMovies';
 import { RemoveHtmlTagsPipe } from '../../../pipes/remove-html-tags.pipe';
 import { UserService } from '../../../services/user.service';
 import Swal from 'sweetalert2';
+import { TrimPipe } from '../../../pipes/trim.pipe';
 
 @Component({
   selector: 'app-detail-hero',
@@ -16,6 +17,7 @@ import Swal from 'sweetalert2';
     NgForOf,
     RemoveHtmlTagsPipe,
     DetailHeroComponent,
+    TrimPipe,
   ],
   templateUrl: './detail-hero.component.html',
   styleUrl: './detail-hero.component.css',

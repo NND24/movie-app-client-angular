@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MovieService } from '../../../services/movie.service';
 import { Movie } from '../../../models/IMovies';
 import { UserService } from '../../../services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-followed-movie-card',
@@ -36,14 +37,25 @@ export class FollowedMovieCardComponent {
 
   removeFromFollowed() {
     if (this.user) {
-      this.userService
-        .removeMovieFromFavorite(this.slug)
-        .subscribe((res: any) => {
-          localStorage.setItem('user', JSON.stringify(res));
-          this.userService.setUser(res.user);
-        });
+      Swal.fire({
+        title: 'Bạn có chắc muốn xóa phim này khỏi theo dõi?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.userService
+            .removeMovieFromFavorite(this.slug)
+            .subscribe((res: any) => {
+              localStorage.setItem('user', JSON.stringify(res));
+              this.userService.setUser(res.user);
+              Swal.fire('Xóa khỏi theo dõi thành công!', '', 'success');
+            });
+        }
+      });
     } else {
-      console.log('Chưa đăng nhập');
+      Swal.fire('Vui lòng đăng nhập để tiếp tục!', '', 'error');
     }
   }
 }

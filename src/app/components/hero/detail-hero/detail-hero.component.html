@@ -1,4 +1,4 @@
-<div *ngIf="movie">
+<div *ngIf="movie" class="h-full">
   <a [routerLink]="['/phim', slug]">
     <img
       [src]="movie.poster_url"
@@ -18,14 +18,14 @@
     class="absolute left-[35px] mobile-m:left-[38px] mobile-l:left-[38px] mobile-xl:left-[50px] sm:left-[65px] bottom-[calc(6%+24px+3.5vw)] lg:bottom-[calc(30%+24px+3.5vw)] sm:bottom-[calc(10%+24px+3.5vw)] flex flex-col items-start w-[79%] mobile-m:w-[82%] mobile-l:w-[84%] sm:w-[70%] md:w-[60%] lg:w-[50%] z-[20]"
   >
     <h1
-      class="font-bold text-[22px] mobile-m:text-[25px] sm:text-[30px] text-[#e0e0e0] text-left drop-shadow-[1px_1px_1px_#000]"
+      class="font-bold text-[22px] line-clamp-1 mobile-m:text-[25px] sm:text-[30px] text-[#e0e0e0] text-left drop-shadow-[1px_1px_1px_#000]"
     >
       {{ movie.name }}
     </h1>
     <p
-      class="font-bold text-[14px] mobile-m:text-[16px] sm:text-[18px] text-[#e0e0e0] mb-1 drop-shadow-[1px_1px_1px_#000]"
+      class="font-bold text-[14px] line-clamp-1 mobile-m:text-[16px] sm:text-[18px] text-[#e0e0e0] mb-1 drop-shadow-[1px_1px_1px_#000]"
     >
-      {{ movie.origin_name }}
+      {{ movie.origin_name | trim }}
     </p>
     <div
       class="text-[13px] sm:text-[14px] text-[#e0e0e0] text-left drop-shadow-[1px_1px_1px_#000] my-1 flex items-center flex-wrap gap-[4px] sm:gap-[6px]"
