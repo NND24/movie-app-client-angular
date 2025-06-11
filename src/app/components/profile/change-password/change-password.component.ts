@@ -12,6 +12,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-change-password',
@@ -90,6 +91,7 @@ export class ChangePasswordComponent {
       .subscribe((res: any) => {
         localStorage.setItem('user', JSON.stringify(res));
         this.userService.setUser(res.user);
+        Swal.fire('Đổi mật khẩu thành công!', '', 'success');
       });
   }
 }

@@ -5,6 +5,7 @@ import { MovieService } from '../../../services/movie.service';
 import { Movie } from '../../../models/IMovies';
 import { RemoveHtmlTagsPipe } from '../../../pipes/remove-html-tags.pipe';
 import { UserService } from '../../../services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detail-hero',
@@ -43,12 +44,17 @@ export class DetailHeroComponent {
 
   addToFollowed() {
     if (this.user) {
-      this.userService.addMovieToFavorite(this.slug).subscribe((res: any) => {
-        localStorage.setItem('user', JSON.stringify(res));
-        this.userService.setUser(res.user);
+      this.userService.addMovieToFavorite(this.slug).subscribe({
+        next: (res: any) => {
+          localStorage.setItem('user', JSON.stringify(res));
+          this.userService.setUser(res.user);
+        },
+        error: (res) => {
+          console.log(res);
+        },
       });
     } else {
-      console.log('Chưa đăng nhập');
+      Swal.fire('Vui lòng đăng nhập để tiếp tục!', '', 'error');
     }
   }
 }

@@ -9,6 +9,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-change-profile',
@@ -60,6 +61,7 @@ export class ChangeProfileComponent {
     this.userService.editProfile(name).subscribe((res: any) => {
       localStorage.setItem('user', JSON.stringify(res));
       this.userService.setUser(res.user);
+      Swal.fire('Đổi tên thành công!', '', 'success');
     });
   }
 
@@ -84,6 +86,7 @@ export class ChangeProfileComponent {
     this.userService.updateAvatar(this.avatar).subscribe((res: any) => {
       localStorage.setItem('user', JSON.stringify(res));
       this.userService.setUser(res.user);
+      Swal.fire('Đổi ảnh đại diện thành công!', '', 'success');
     });
   }
 }

@@ -10,6 +10,7 @@ import {
 import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -73,7 +74,7 @@ export class LoginComponent {
         localStorage.setItem('user', JSON.stringify(res));
         this.userService.setUser(res.user);
         this.closeLoginEvent.emit(false);
-        this.toastr.success('Đăng nhập thành công');
+        Swal.fire('Đăng nhập thành công!', '', 'success');
       },
     });
   }

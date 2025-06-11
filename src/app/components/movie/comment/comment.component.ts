@@ -4,6 +4,7 @@ import { User } from '../../../models/IUser';
 import { UserService } from '../../../services/user.service';
 import { FormsModule } from '@angular/forms';
 import { CommentService } from '../../../services/comment.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-comment',
@@ -59,11 +60,21 @@ export class CommentComponent {
   }
 
   handleDeleteReply(commentId: string, itemId: string) {
-    this.commentService
-      .deleteReply(this.slug, commentId, itemId)
-      .subscribe(() => {
-        this.loadComments();
-      });
+    Swal.fire({
+      title: 'Bạn có chắc muốn xóa phản hồi này?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.commentService
+          .deleteReply(this.slug, commentId, itemId)
+          .subscribe(() => {
+            this.loadComments();
+          });
+      }
+    });
   }
 
   toggleReplyActive(commentId: string) {
@@ -76,8 +87,20 @@ export class CommentComponent {
   }
 
   handleDeleteComment(commentId: string) {
-    this.commentService.deleteComment(this.slug, commentId).subscribe(() => {
-      this.loadComments();
+    Swal.fire({
+      title: 'Bạn có chắc muốn xóa bình luận này?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.commentService
+          .deleteComment(this.slug, commentId)
+          .subscribe(() => {
+            this.loadComments();
+          });
+      }
     });
   }
 }

@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-sign-up',
@@ -68,7 +69,9 @@ export class SignUpComponent {
 
     this.authService.register(name, email, password).subscribe({
       next: (res) => {
-        console.log('Đăng ký thành công: ', res);
+        Swal.fire('Đăng ký thành công!', '', 'success');
+        this.closeSignUpEvent.emit(false);
+        this.openLoginEvent.emit(true);
       },
     });
   }
