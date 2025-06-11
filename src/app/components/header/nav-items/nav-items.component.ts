@@ -19,7 +19,7 @@ export class NavItemsComponent {
   genreItems = genreItemsData;
   nationItems = nationItemsData;
 
-  @Input() isMobileTablet = false;
+  @Input() isMobileTablet: any = false;
 
   openCatModal = false;
   openGenreModal = false;

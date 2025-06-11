@@ -47,50 +47,53 @@
                 "
                 alt="avatar"
                 class="w-[30px] h-[30px] object-cover rounded-full cursor-pointer"
-                (click)="toggleModel()"
+                (click)="toggleModal()"
               />
 
-              @if(openModel) {
-              <i
-                class="fa fa-sort-asc absolute top-[32px] left-[8px] text-[#00dc5a]"
-              ></i>
+              <ng-container *ngIf="openModal">
+                <i
+                  class="fa fa-sort-asc absolute top-[32px] left-[8px] text-[#00dc5a]"
+                ></i>
 
-              <ul
-                class="absolute top-[39px] right-[-50px] w-[220px] sm:w-[250px] py-1 bg-[#1a191f] flex flex-col"
-              >
-                <a
-                  routerLink="/lich-su"
-                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
+                <ul
+                  class="absolute top-[39px] right-[-50px] w-[220px] sm:w-[250px] py-1 bg-[#1a191f] flex flex-col"
                 >
-                  <i class="fa fa-history"></i>
-                  <span>Lịch sử xem phim</span>
-                </a>
-                <a
-                  routerLink="/theo-doi"
-                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
-                >
-                  <i class="fa fa-bookmark"></i>
-                  <span>Phim đã lưu</span>
-                </a>
-                <a
-                  routerLink="/trang-ca-nhan"
-                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
-                >
-                  <i class="fa fa-user"></i>
-                  <span> Tài khoản của tôi</span>
-                </a>
-                <div
-                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633] cursor-pointer"
-                  (click)="handleLogout()"
-                >
-                  <i class="fa fa-sign-out"></i>
-                  <span>Đăng xuất</span>
-                </div>
-              </ul>
-              }
+                  <a
+                    routerLink="/lich-su"
+                    class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
+                  >
+                    <i class="fa fa-history"></i>
+                    <span>Lịch sử xem phim</span>
+                  </a>
+                  <a
+                    routerLink="/theo-doi"
+                    class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
+                  >
+                    <i class="fa fa-bookmark"></i>
+                    <span>Phim đã lưu</span>
+                  </a>
+                  <a
+                    routerLink="/trang-ca-nhan"
+                    class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
+                  >
+                    <i class="fa fa-user"></i>
+                    <span> Tài khoản của tôi</span>
+                  </a>
+                  <div
+                    class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633] cursor-pointer"
+                    (click)="handleLogout()"
+                  >
+                    <i class="fa fa-sign-out"></i>
+                    <span>Đăng xuất</span>
+                  </div>
+                </ul>
+              </ng-container>
             </div>
             <div class="block md:hidden">
-              <i class="fa fa-bars !text-[20px] text-white cursor-pointer"></i>
+              <i
+                class="fa fa-bars !text-[20px] text-white cursor-pointer"
+                (click)="toggleSidebar()"
+              ></i>
             </div>
           </div>
 
@@ -103,6 +106,7 @@
               <div class="block md:hidden">
                 <i
                   class="fa fa-bars !text-[20px] text-white cursor-pointer"
+                  (click)="toggleSidebar()"
                 ></i>
               </div>
             </div>
@@ -133,6 +137,8 @@
   />
 </div>
 
-<!-- <div>
-        <app-sidebar />
-      </div> -->
+<app-sidebar
+  *ngIf="openSidebar"
+  (toggleLoginEvent)="onToggleLogin($event)"
+  (toggleSidebarEvent)="onToggleSidebar($event)"
+/>

@@ -5,9 +5,9 @@ import { LoginComponent } from '../../auth/login/login.component';
 import { SignUpComponent } from '../../auth/sign-up/sign-up.component';
 import { Router, RouterModule } from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -27,7 +27,8 @@ import { UserService } from '../../../services/user.service';
 })
 export class HeaderComponent {
   user: any;
-  openModel: boolean = false;
+  openModal: boolean = false;
+  openSidebar: boolean = false;
   openLogin: boolean = false;
   openSignUp: boolean = false;
   isProfile: boolean = false;
@@ -41,7 +42,7 @@ export class HeaderComponent {
   ) {}
 
   ngOnInit() {
-    this.openModel = false;
+    this.openModal = false;
     this.userService.user$.subscribe((data) => {
       this.user = data;
     });
@@ -52,8 +53,13 @@ export class HeaderComponent {
     }
   }
 
-  toggleModel() {
-    this.openModel = !this.openModel;
+  toggleModal() {
+    this.openModal = !this.openModal;
+  }
+
+  toggleSidebar() {
+    console.log(1);
+    this.openSidebar = !this.openSidebar;
   }
 
   onToggleLogin(data: boolean) {
@@ -62,6 +68,10 @@ export class HeaderComponent {
 
   onToggleSignUp(data: boolean) {
     this.openSignUp = data;
+  }
+
+  onToggleSidebar(data: boolean) {
+    this.openSidebar = data;
   }
 
   @HostListener('window:scroll', [])
