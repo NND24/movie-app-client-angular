@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private toastr: ToastrService
   ) {}
 
   @Output() closeLoginEvent = new EventEmitter<boolean>();
@@ -71,6 +73,7 @@ export class LoginComponent {
         localStorage.setItem('user', JSON.stringify(res));
         this.userService.setUser(res.user);
         this.closeLoginEvent.emit(false);
+        this.toastr.success('Đăng nhập thành công');
       },
     });
   }

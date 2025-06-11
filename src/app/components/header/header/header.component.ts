@@ -91,6 +91,7 @@ export class HeaderComponent {
     this.authService.logout().subscribe((res) => {
       this.userService.clearUser();
       localStorage.removeItem('user');
+      this.router.navigateByUrl('/');
     });
   }
 }
