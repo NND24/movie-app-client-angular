@@ -1,21 +1,11 @@
 <div
-  class="max-h-screen sm:!h-[60vw] mobile-xl:!h-[60vw] mobile-l:!h-[60vw] mobile-m:!h-[60vw] mobile-s:!h-[60vw]"
+  class="max-h-screen h-[60vw] sm:h-[60vw] mobile-xl:h-[65vw] mobile-l:h-[70vw] mobile-m:h-[75vw] mobile-s:h-[90vw]"
 >
-  <div
-    class="relative overflow-hidden max-h-screen sm:!h-[60vw] mobile-xl:!h-[65vw] mobile-l:!h-[70vw] mobile-m:!h-[75vw] mobile-s:!h-[90vw] mb-[-15.5%]"
-  >
-    <swiper-container
-      slides-per-view="1"
-      space-between="0"
-      [loop]="true"
-      [autoplay]="{ delay: 4000, disableOnInteraction: false }"
-      [pagination]="{ clickable: true }"
-      [navigation]="true"
-      class="mySwiper"
-    >
-      <swiper-slide *ngFor="let movie of items.slice(0, 8)">
+  <div class="relative overflow-hidden max-h-screen mb-[-15.5%] h-full">
+    <swiper [config]="config" class="mySwiper w-full h-full">
+      <ng-template swiperSlide *ngFor="let movie of items.slice(0, 8)">
         <app-detail-hero [slug]="movie.slug" />
-      </swiper-slide>
-    </swiper-container>
+      </ng-template>
+    </swiper>
   </div>
 </div>

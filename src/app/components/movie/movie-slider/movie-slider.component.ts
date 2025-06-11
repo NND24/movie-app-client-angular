@@ -1,20 +1,33 @@
 import { NgFor } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
+import { SwiperModule } from 'swiper/angular';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import Swiper, { Navigation } from 'swiper';
 
 @Component({
   selector: 'app-movie-slider',
   standalone: true,
-  imports: [RouterModule, NgFor, MovieCardComponent, RouterModule],
+  imports: [
+    RouterModule,
+    NgFor,
+    MovieCardComponent,
+    RouterModule,
+    SwiperModule,
+  ],
   templateUrl: './movie-slider.component.html',
   styleUrl: './movie-slider.component.css',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MovieSliderComponent {
   @Input() title!: string;
   @Input() slug!: string;
   @Input() items: any[] = [];
+
+  constructor() {
+    Swiper.use([Navigation]);
+  }
 
   swiperBreakpoints = {
     320: {

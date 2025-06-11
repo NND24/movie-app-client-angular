@@ -1,20 +1,22 @@
 <div class="w-full relative">
-  <div class="w-[90%] m-auto py-3">
+  <div class="w-[90%] mx-auto py-3">
     <a
       [routerLink]="['/danh-sach', slug]"
       [queryParams]="{ page: 1 }"
-      class="text-[22px] font-bold text-white leading-[45px]"
+      class="text-[22px] font-bold text-white leading-[45px] hover:text-green-400 transition-colors"
     >
       {{ title }}
     </a>
-    <swiper-container
+
+    <swiper
       [navigation]="true"
-      class="movie-slider"
       [breakpoints]="swiperBreakpoints"
+      [spaceBetween]="15"
+      class="movie-slider mt-2"
     >
-      <swiper-slide *ngFor="let movie of items">
-        <app-movie-card [slug]="movie.slug" />
-      </swiper-slide>
-    </swiper-container>
+      <ng-template swiperSlide *ngFor="let movie of items">
+        <app-movie-card [slug]="movie.slug" style="width: 100%" />
+      </ng-template>
+    </swiper>
   </div>
 </div>
