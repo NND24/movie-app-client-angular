@@ -1,5 +1,5 @@
 import { DatePipe, NgFor, NgForOf, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, computed, Input } from '@angular/core';
 import { User } from '../../../models/IUser';
 import { UserService } from '../../../services/user.service';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class CommentComponent {
   @Input() slug: string = '';
-  user: any;
+  user = computed(() => this.userService.user());
   activeReply: string = '';
   comments: any;
   comment: string = '';
@@ -27,11 +27,6 @@ export class CommentComponent {
   ) {}
 
   ngOnInit() {
-    this.userService.user$.subscribe((data) => {
-      this.user = data;
-      console.log(this.user);
-    });
-
     this.loadComments();
   }
 

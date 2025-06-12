@@ -12,16 +12,16 @@
   </a>
 </div>
 
-<ng-container *ngIf="user; else noUserData">
+<ng-container *ngIf="user(); else noUserData">
   <div
-    *ngIf="user?.history?.length > 0; else noHistoryData"
+    *ngIf="user()?.history?.length > 0; else noHistoryData"
     class="w-[90%] m-auto grid grid-cols-12 gap-[35px] mt-2"
   >
     <div class="col-span-12">
       <div
         class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 sm:gap-[20px] grid-cols-2 gap-[5px]"
       >
-        <div *ngFor="let movie of user?.history">
+        <div *ngFor="let movie of user()?.history">
           <app-history-movie-card
             [slug]="movie?.movie_slug"
             [lasted_ep]="movie.lasted_ep"

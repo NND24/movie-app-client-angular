@@ -17,7 +17,7 @@ import {
 } from '../../constants/data';
 import { MovieCategoryResponse } from '../../models/IMovies';
 import { MovieService } from '../../services/movie.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -65,6 +65,8 @@ export class ListMovieComponent {
   nation!: string;
   search!: string;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private movieService: MovieService,
     private route: ActivatedRoute,
@@ -72,7 +74,7 @@ export class ListMovieComponent {
   ) {}
 
   ngOnInit() {
-    this.router.events.subscribe((event) => {
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if (event instanceof NavigationEnd) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -85,7 +87,7 @@ export class ListMovieComponent {
       (_, i) => endYear - i
     );
 
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.category = params.get('category') || '';
       this.genre = params.get('genre') || '';
       this.nation = params.get('nation') || '';
@@ -94,15 +96,17 @@ export class ListMovieComponent {
       this.fetchData();
     });
 
-    this.route.queryParamMap.subscribe((queryParams) => {
-      this.currentPage = parseInt(queryParams.get('page') || '1', 10);
-      this.sortField = queryParams.get('sortField') || '';
-      this.filterGenre = queryParams.get('category') || '';
-      this.country = queryParams.get('country') || '';
-      this.year = queryParams.get('year') || '';
+    this.route.queryParamMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((queryParams) => {
+        this.currentPage = parseInt(queryParams.get('page') || '1', 10);
+        this.sortField = queryParams.get('sortField') || '';
+        this.filterGenre = queryParams.get('category') || '';
+        this.country = queryParams.get('country') || '';
+        this.year = queryParams.get('year') || '';
 
-      this.fetchData();
-    });
+        this.fetchData();
+      });
 
     this.movieService
       .getMovieByCategory('sap-chieu', 1, '', '', '', '')
@@ -213,5 +217,10 @@ export class ListMovieComponent {
     }
 
     this.pageNumbers = range;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

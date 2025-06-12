@@ -3,12 +3,19 @@ import { provideRouter } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  HttpClientModule,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
+    provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(
       HttpClientModule,
       BrowserAnimationsModule,
@@ -19,5 +26,6 @@ export const appConfig: ApplicationConfig = {
         progressBar: true,
       })
     ),
+    provideAnimationsAsync(),
   ],
 };

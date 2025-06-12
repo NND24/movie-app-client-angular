@@ -37,12 +37,13 @@
             ></i>
           </div>
 
-          <div *ngIf="user; else noUserData" class="flex items-center gap-3">
+          @if(user()) {
+          <div class="flex items-center gap-3">
             <div class="relative ml-4">
               <img
                 [src]="
-                  user.avatar
-                    ? user.avatar.url
+                  user().avatar
+                    ? user().avatar.url
                     : '../../../../assets/defaultAvatar.png'
                 "
                 alt="avatar"
@@ -50,44 +51,48 @@
                 (click)="toggleModal()"
               />
 
-              <ng-container *ngIf="openModal">
-                <i
-                  class="fa fa-sort-asc absolute top-[32px] left-[8px] text-[#00dc5a]"
-                ></i>
+              @if(openModal) {
+              <i
+                class="fa fa-sort-asc absolute top-[32px] left-[8px] text-[#00dc5a]"
+              ></i>
 
-                <ul
-                  class="absolute top-[39px] right-[-50px] w-[220px] sm:w-[250px] py-1 bg-[#1a191f] flex flex-col"
+              <ul
+                class="absolute top-[39px] right-[-50px] w-[220px] sm:w-[250px] py-1 bg-[#1a191f] flex flex-col"
+              >
+                <a
+                  routerLink="/lich-su"
+                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
                 >
-                  <a
-                    routerLink="/lich-su"
-                    class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
-                  >
-                    <i class="fa fa-history"></i>
-                    <span>Lịch sử xem phim</span>
-                  </a>
-                  <a
-                    routerLink="/theo-doi"
-                    class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
-                  >
-                    <i class="fa fa-bookmark"></i>
-                    <span>Phim đã lưu</span>
-                  </a>
-                  <a
-                    routerLink="/trang-ca-nhan"
-                    class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
-                  >
-                    <i class="fa fa-user"></i>
-                    <span> Tài khoản của tôi</span>
-                  </a>
-                  <div
-                    class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633] cursor-pointer"
-                    (click)="handleLogout()"
-                  >
-                    <i class="fa fa-sign-out"></i>
-                    <span>Đăng xuất</span>
-                  </div>
-                </ul>
-              </ng-container>
+                  <i class="fa fa-history"></i>
+                  <span>Lịch sử xem phim</span>
+                </a>
+                <a
+                  routerLink="/theo-doi"
+                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
+                >
+                  <i class="fa fa-bookmark"></i>
+                  <span>Phim đã lưu</span>
+                </a>
+                <a
+                  routerLink="/trang-ca-nhan"
+                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633]"
+                >
+                  <i class="fa fa-user"></i>
+                  <span> Tài khoản của tôi</span>
+                </a>
+                <div
+                  class="text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] hover:border-l-[3px] hover:border-[#00DC5A] p-2 flex items-center gap-2 hover:bg-[#96969633] cursor-pointer"
+                  (click)="handleLogout()"
+                >
+                  <mat-icon
+                    aria-hidden="false"
+                    aria-label="Example home icon"
+                    fontIcon="logout"
+                  ></mat-icon>
+                  <span>Đăng xuất</span>
+                </div>
+              </ul>
+              }
             </div>
             <div class="block md:hidden">
               <i
@@ -96,49 +101,47 @@
               ></i>
             </div>
           </div>
-
-          <ng-template #noUserData>
-            <div class="flex items-center gap-1">
+          } @else {
+          <div class="flex items-center gap-1">
+            <i
+              class="fa fa-user !text-[20px] mx-4 text-white hover:text-[#00dc5a] cursor-pointer"
+              (click)="onToggleLogin(true)"
+            ></i>
+            <div class="block md:hidden">
               <i
-                class="fa fa-user !text-[20px] mx-4 text-white hover:text-[#00dc5a] cursor-pointer"
-                (click)="onToggleLogin(true)"
+                class="fa fa-bars !text-[20px] text-white cursor-pointer"
+                (click)="toggleSidebar()"
               ></i>
-              <div class="block md:hidden">
-                <i
-                  class="fa fa-bars !text-[20px] text-white cursor-pointer"
-                  (click)="toggleSidebar()"
-                ></i>
-              </div>
             </div>
-          </ng-template>
+          </div>
+          }
         </div>
       </div>
     </div>
   </div>
 </header>
 
+@if(openLogin) {
 <div
   class="fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[85%] sm:w-[500px] bg-[#f8f8f8] rounded-[8px] shadow p-4 outline-none z-[2000]"
-  *ngIf="openLogin"
 >
   <app-login
     (closeLoginEvent)="onToggleLogin($event)"
     (openSignUpEvent)="onToggleSignUp($event)"
   />
 </div>
-
+} @if(openSignUp) {
 <div
   class="fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[85%] sm:w-[500px] bg-[#f8f8f8] rounded-[8px] shadow p-4 outline-none z-[2000]"
-  *ngIf="openSignUp"
 >
   <app-sign-up
     (openLoginEvent)="onToggleLogin($event)"
     (closeSignUpEvent)="onToggleSignUp($event)"
   />
 </div>
-
+} @if(openSidebar) {
 <app-sidebar
-  *ngIf="openSidebar"
   (toggleLoginEvent)="onToggleLogin($event)"
   (toggleSidebarEvent)="onToggleSidebar($event)"
 />
+}

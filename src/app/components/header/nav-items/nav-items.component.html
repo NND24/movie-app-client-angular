@@ -1,4 +1,4 @@
-@if(isMobileTablet) {
+@if(isMobileTablet()) {
 <div class="flex items-center flex-col">
   <div
     class="w-full items-center relative cursor-pointer text-[17px] font-Poppins font-medium text-[#e0e0e0]"
@@ -9,11 +9,12 @@
       <i class="fa fa-sort-desc text-[#00dc5a]" aria-hidden="true"></i>
     </div>
 
+    @if(openCatModal) {
     <ul
-      *ngIf="openCatModal"
       class="w-full py-1 px-2 bg-[#1a191f] grid grid-cols-2 sm:grid-cols-3 justify-items-center"
     >
-      <li *ngFor="let nav of navItems">
+      @for(nav of navItems; track $index){
+      <li>
         <a
           [routerLink]="['/danh-sach', nav.slug]"
           [queryParams]="{ page: 1 }"
@@ -22,7 +23,9 @@
           {{ nav.name }}
         </a>
       </li>
+      }
     </ul>
+    }
   </div>
 
   <div
@@ -34,11 +37,12 @@
       <i class="fa fa-sort-desc text-[#00dc5a]" aria-hidden="true"></i>
     </div>
 
+    @if(openGenreModal){
     <ul
-      *ngIf="openGenreModal"
       class="w-full py-1 px-2 bg-[#1a191f] grid grid-cols-2 sm:grid-cols-3 justify-items-center"
     >
-      <li *ngFor="let genre of genreItems">
+      @for(genre of genreItems; track $index) {
+      <li>
         <a
           [routerLink]="['/the-loai', genre.slug]"
           [queryParams]="{ page: 1 }"
@@ -47,7 +51,9 @@
           {{ genre.name }}
         </a>
       </li>
+      }
     </ul>
+    }
   </div>
 
   <div
@@ -59,13 +65,13 @@
       <i class="fa fa-sort-desc text-[#00dc5a]" aria-hidden="true"></i>
     </div>
 
+    @if(openNationModal) {
     <ul
-      *ngIf="openNationModal"
       class="w-full py-1 px-2 bg-[#1a191f] grid grid-cols-2 sm:grid-cols-3 justify-items-center"
     >
-      <li *ngFor="let nation of nationItems">
+      @for(nation of nationItems; track $index){
+      <li>
         <a
-          key="{index}"
           [routerLink]="['/quoc-gia', nation.slug]"
           [queryParams]="{ page: 1 }"
           class="block text-[14px] sm:text-[16px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a] p-2 text-left"
@@ -73,20 +79,23 @@
           {{ nation.name }}
         </a>
       </li>
+      }
     </ul>
+    }
   </div>
 </div>
 } @else {
 <div class="hidden md:block">
   <div class="flex items-center gap-[15px]">
+    @for(nav of navItems.slice(0, 5); track $index) {
     <a
-      *ngFor="let nav of navItems.slice(0, 5)"
       [routerLink]="['/danh-sach', nav.slug]"
       [queryParams]="{ page: 1 }"
       class="hidden xl:block text-[17px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] hover:text-[#00dc5a]"
     >
       {{ nav.name }}
     </a>
+    }
 
     <div
       class="flex xl:hidden items-center relative cursor-pointer text-[17px] font-Poppins font-medium text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] pr-4"
@@ -113,7 +122,8 @@
             0 0 20px rgba(0, 0, 0, 0.5);
         "
       >
-        <li *ngFor="let nav of navItems">
+        @for(nav of navItems; track $index) {
+        <li>
           <a
             [routerLink]="['/danh-sach', nav.slug]"
             [queryParams]="{ page: 1 }"
@@ -122,6 +132,7 @@
             {{ nav.name }}
           </a>
         </li>
+        }
       </ul>
       }
     </div>
@@ -151,7 +162,8 @@
             0 0 20px rgba(0, 0, 0, 0.5);
         "
       >
-        <li *ngFor="let genre of genreItems">
+        @for(genre of genreItems; track $index) {
+        <li>
           <a
             [routerLink]="['/the-loai', genre.slug]"
             [queryParams]="{ page: 1 }"
@@ -160,6 +172,7 @@
             {{ genre.name }}
           </a>
         </li>
+        }
       </ul>
       }
     </div>
@@ -189,7 +202,8 @@
             0 0 20px rgba(0, 0, 0, 0.5);
         "
       >
-        <li *ngFor="let nation of nationItems">
+        @for(nation of nationItems; track $index) {
+        <li>
           <a
             [routerLink]="['/quoc-gia', nation.slug]"
             [queryParams]="{ page: 1 }"
@@ -198,6 +212,7 @@
             {{ nation.name }}
           </a>
         </li>
+        }
       </ul>
       }
     </div>

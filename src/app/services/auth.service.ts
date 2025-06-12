@@ -9,34 +9,41 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string) {
-    return this.http.post(`${environment.apiUrl}/login`, {
-      email,
-      password,
-    });
+    return this.http.post(
+      `${environment.apiUrl}/login`,
+      {
+        email,
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
   }
 
   register(name: string, email: string, password: string) {
-    return this.http.post(`${environment.apiUrl}/register`, {
-      name,
-      email,
-      password,
-    });
+    return this.http.post(
+      `${environment.apiUrl}/register`,
+      {
+        name,
+        email,
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
   }
 
   logout() {
-    const tokenData = localStorage.getItem('user');
+    return this.http.get(`${environment.apiUrl}/logout`, {
+      withCredentials: true,
+    });
+  }
 
-    if (tokenData) {
-      const user = JSON.parse(tokenData);
-      const token = user.accessToken;
-
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
-
-      return this.http.get(`${environment.apiUrl}/logout`, { headers });
-    }
-
-    return this.http.get(`${environment.apiUrl}/logout`);
+  refreshToken() {
+    return this.http.get(`${environment.apiUrl}/refresh`, {
+      withCredentials: true,
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, computed, HostListener, inject } from '@angular/core';
 import { NavItemsComponent } from '../nav-items/nav-items.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { LoginComponent } from '../../auth/login/login.component';
@@ -8,6 +8,7 @@ import { NgClass, NgIf } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
@@ -21,12 +22,17 @@ import { FormsModule } from '@angular/forms';
     NgIf,
     NgClass,
     FormsModule,
+    MatIconModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  user: any;
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
+
+  user = computed(() => this.userService.user());
   openModal: boolean = false;
   openSidebar: boolean = false;
   openLogin: boolean = false;
@@ -35,30 +41,11 @@ export class HeaderComponent {
   activeScroll: boolean = false;
   search: string = '';
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private userService: UserService
-  ) {}
-
-  ngOnInit() {
-    this.openModal = false;
-    this.userService.user$.subscribe((data) => {
-      this.user = data;
-    });
-
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      this.userService.setUser(JSON.parse(storedUser).user);
-    }
-  }
-
   toggleModal() {
     this.openModal = !this.openModal;
   }
 
   toggleSidebar() {
-    console.log(1);
     this.openSidebar = !this.openSidebar;
   }
 
@@ -90,7 +77,6 @@ export class HeaderComponent {
   handleLogout() {
     this.authService.logout().subscribe((res) => {
       this.userService.clearUser();
-      localStorage.removeItem('user');
       this.router.navigateByUrl('/');
     });
   }

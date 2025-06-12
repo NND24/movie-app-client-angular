@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, computed, EventEmitter, Output } from '@angular/core';
 import { NavItemsComponent } from '../nav-items/nav-items.component';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
-  user: any;
+  user = computed(() => this.userService.user());
   search: string = '';
   openModal: boolean = false;
   @Output() toggleLoginEvent = new EventEmitter<boolean>(false);
@@ -27,10 +27,6 @@ export class SidebarComponent {
   ) {}
 
   ngOnInit() {
-    this.userService.user$.subscribe((data) => {
-      this.user = data;
-    });
-
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       this.userService.setUser(JSON.parse(storedUser).user);

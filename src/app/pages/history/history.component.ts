@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { HistoryMovieCardComponent } from '../../components/movie/history-movie-card/history-movie-card.component';
 import { NgForOf, NgIf } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-history',
@@ -21,19 +22,21 @@ import { NgForOf, NgIf } from '@angular/common';
   styleUrl: './history.component.css',
 })
 export class HistoryComponent {
-  user: any;
+  user = computed(() => this.userService.user());
+  private destroy$ = new Subject<void>();
 
   constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
-    this.router.events.subscribe((event) => {
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if (event instanceof NavigationEnd) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
+  }
 
-    this.userService.user$.subscribe((data) => {
-      this.user = data;
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

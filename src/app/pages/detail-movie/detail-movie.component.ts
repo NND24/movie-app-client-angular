@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { HeroDetailMovieComponent } from '../../components/hero/hero-detail-movie/hero-detail-movie.component';
@@ -19,6 +19,7 @@ import { RemoveHtmlTagsPipe } from '../../pipes/remove-html-tags.pipe';
 import { CommentComponent } from '../../components/movie/comment/comment.component';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { UserService } from '../../services/user.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-detail-movie',
@@ -30,7 +31,6 @@ import { UserService } from '../../services/user.service';
     RouterModule,
     RemoveHtmlTagsPipe,
     CommentComponent,
-    NgIf,
     NgForOf,
     NgClass,
   ],
@@ -38,33 +38,27 @@ import { UserService } from '../../services/user.service';
   styleUrl: './detail-movie.component.css',
 })
 export class DetailMovieComponent {
+  private movieService = inject(MovieService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private userService = inject(UserService);
+
   slug: string = '';
   movie!: DetailMovieResponse;
   separatedData!: Record<string, ServerData[]>;
   separatedEntries: { serverName: string; episodes: ServerData[] }[] = [];
-  user: any;
+  user = computed(() => this.userService.user());
 
   watchedMovieItem = {
     watched_eps: [''],
   };
 
-  constructor(
-    private movieService: MovieService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private userService: UserService
-  ) {}
+  private destroy$ = new Subject<void>();
 
-  ngOnInit() {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-
-    this.userService.user$.subscribe((data) => {
-      if (data) {
-        this.watchedMovieItem = data?.history.find(
+  constructor() {
+    effect(() => {
+      if (this.user()) {
+        this.watchedMovieItem = this.user()?.history.find(
           (item: any) => item.movie_slug === this.slug
         );
         if (!this.watchedMovieItem) {
@@ -78,49 +72,63 @@ export class DetailMovieComponent {
         };
       }
     });
+  }
 
-    this.route.paramMap.subscribe((params) => {
+  ngOnInit() {
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const slugParam = params.get('slug');
 
       if (slugParam) {
         this.slug = slugParam;
 
-        this.movieService.getDetailMovie(this.slug).subscribe({
-          next: (res) => {
-            this.movie = res;
+        this.movieService
+          .getDetailMovie(this.slug)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (res) => {
+              this.movie = res;
 
-            this.separatedData = this.movie.episodes.reduce(
-              (acc: Record<string, ServerData[]>, server: Episode) => {
-                acc[server.server_name] = server.server_data;
-                return acc;
-              },
-              {} as Record<string, ServerData[]>
-            );
+              this.separatedData = this.movie.episodes.reduce(
+                (acc: Record<string, ServerData[]>, server: Episode) => {
+                  acc[server.server_name] = server.server_data;
+                  return acc;
+                },
+                {} as Record<string, ServerData[]>
+              );
 
-            this.separatedEntries = Object.entries(this.separatedData).map(
-              ([serverName, episodes]) => ({ serverName, episodes })
-            );
-          },
-          error: (err) => {
-            console.error('Lỗi lấy chi tiết phim:', err);
-          },
-        });
+              this.separatedEntries = Object.entries(this.separatedData).map(
+                ([serverName, episodes]) => ({ serverName, episodes })
+              );
+            },
+            error: (err) => {
+              console.error('Lỗi lấy chi tiết phim:', err);
+            },
+          });
       }
-    });
-
-    this.userService.user$.subscribe((data) => {
-      this.user = data;
     });
   }
 
   addHistory(epName: string) {
-    if (this.user) {
-      this.userService.addToHistory(this.slug, epName).subscribe((res: any) => {
-        localStorage.setItem('user', JSON.stringify(res));
-        this.userService.setUser(res.user);
-      });
+    if (this.user()) {
+      this.userService
+        .addToHistory(this.slug, epName)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res: any) => {
+          this.userService.setUser(res);
+        });
     } else {
       console.log('Chưa đăng nhập');
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

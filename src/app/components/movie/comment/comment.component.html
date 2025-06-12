@@ -38,8 +38,8 @@
         <div class="flex mb-1">
           <img
             [src]="
-              comment?.user?.avatar
-                ? comment?.user?.avatar?.url
+              comment?.user()?.avatar
+                ? comment?.user()?.avatar?.url
                 : '../../public/defaultAvatar.png'
             "
             alt="avatar"
@@ -48,7 +48,7 @@
           <div class="pl-3 text-white">
             <div class="flex gap-[10px]">
               <h5 class="text-[20px] leading-[18px]">
-                {{ comment?.user?.name }}
+                {{ comment?.user()?.name }}
               </h5>
 
               <small class="text-[#ffffff83]" *ngIf="comment.createdAt">{{
@@ -76,7 +76,7 @@
           }}</span>
 
           <button
-            *ngIf="user?.id === comment?.user?._id"
+            *ngIf="user()?.id === comment?.user()?._id"
             (click)="handleDeleteComment(comment._id)"
             class="text-red-500 ml-2"
           >
@@ -91,8 +91,8 @@
             <div>
               <img
                 [src]="
-                  item?.user?.avatar
-                    ? item?.user?.avatar?.url
+                  item?.user()?.avatar
+                    ? item?.user()?.avatar?.url
                     : '../../public/defaultAvatar.png'
                 "
                 alt="avatar"
@@ -103,10 +103,10 @@
               <div class="flex gap-[4px]">
                 <div class="flex items-center">
                   <h5 class="text-[20px] leading-[18px]">
-                    {{ item?.user?.name }}
+                    {{ item?.user()?.name }}
                   </h5>
                   <i
-                    *ngIf="item.user.role === 'admin'"
+                    *ngIf="item.user().role === 'admin'"
                     class="fa fa-check-circle text-[#0095F6] ml-2 text-[20px]"
                     aria-hidden="true"
                   ></i>
@@ -119,7 +119,7 @@
               <p class="pt-[4px]">{{ item?.comment }}</p>
 
               <button
-                *ngIf="user?.id === item?.user?._id"
+                *ngIf="user()?.id === item?.user()?._id"
                 (click)="handleDeleteReply(comment._id, item._id)"
                 class="text-red-500"
               >

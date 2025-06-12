@@ -1,5 +1,5 @@
-import { NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { NgIf, NgOptimizedImage } from '@angular/common';
+import { Component, computed, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MovieService } from '../../../services/movie.service';
 import { Movie } from '../../../models/IMovies';
@@ -9,14 +9,14 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-followed-movie-card',
   standalone: true,
-  imports: [NgIf, RouterModule],
+  imports: [NgIf, RouterModule, NgOptimizedImage],
   templateUrl: './followed-movie-card.component.html',
   styleUrl: './followed-movie-card.component.css',
 })
 export class FollowedMovieCardComponent {
   @Input() slug: string = '';
   movie!: Movie;
-  user: any;
+  user = computed(() => this.userService.user());
 
   constructor(
     private movieService: MovieService,
@@ -29,14 +29,10 @@ export class FollowedMovieCardComponent {
         this.movie = res.movie;
       },
     });
-
-    this.userService.user$.subscribe((data) => {
-      this.user = data;
-    });
   }
 
   removeFromFollowed() {
-    if (this.user) {
+    if (this.user()) {
       Swal.fire({
         title: 'Bạn có chắc muốn xóa phim này khỏi theo dõi?',
         icon: 'warning',

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, computed, EventEmitter, Output } from '@angular/core';
 import { HeaderComponent } from '../../header/header/header.component';
 import { NgIf } from '@angular/common';
 import { UserService } from '../../../services/user.service';
@@ -22,7 +22,7 @@ import Swal from 'sweetalert2';
   styleUrl: './change-password.component.css',
 })
 export class ChangePasswordComponent {
-  user: any;
+  user = computed(() => this.userService.user());
   @Output() changeEvent = new EventEmitter<boolean>(false);
   passwordForm!: FormGroup;
 
@@ -50,10 +50,6 @@ export class ChangePasswordComponent {
       if (event instanceof NavigationEnd) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    });
-
-    this.userService.user$.subscribe((data) => {
-      this.user = data;
     });
 
     this.passwordForm = this.fb.group(
@@ -89,8 +85,7 @@ export class ChangePasswordComponent {
     this.userService
       .updatePassword(oldPassword, newPassword)
       .subscribe((res: any) => {
-        localStorage.setItem('user', JSON.stringify(res));
-        this.userService.setUser(res.user);
+        this.userService.setUser(res);
         Swal.fire('Đổi mật khẩu thành công!', '', 'success');
       });
   }

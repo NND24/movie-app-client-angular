@@ -16,12 +16,13 @@
         [class.border-red-500]="name?.invalid && name?.touched"
         class="w-full text-black bg-transparent border rounded h-[40px] px-2 outline-none mt-[0px] font-Poppins"
       />
-      <div
-        class="text-red-500 text-sm mt-1"
-        *ngIf="name?.invalid && name?.touched"
-      >
-        <span *ngIf="name?.errors?.['required']">Please enter your name!</span>
+      @if(name?.invalid && name?.touched) {
+      <div class="text-red-500 text-sm mt-1">
+        @if(name?.errors?.['required']) {
+        <span>Please enter your name!</span>
+        }
       </div>
+      }
     </div>
 
     <label class="text-[16px] font-Poppins text-black" htmlFor="email">
@@ -36,13 +37,15 @@
       [class.border-red-500]="email?.invalid && email?.touched"
       class="w-full text-black bg-transparent border rounded h-[40px] px-2 outline-none mt-[0px] font-Poppins"
     />
-    <div
-      class="text-red-500 text-sm mt-1"
-      *ngIf="email?.invalid && email?.touched"
-    >
-      <span *ngIf="email?.errors?.['required']">Please enter your email!</span>
-      <span *ngIf="email?.errors?.['email']">Invalid email!</span>
+    @if(email?.invalid && email?.touched) {
+    <div class="text-red-500 text-sm mt-1">
+      @if(email?.errors?.['required']) {
+      <span>Please enter your email!</span>
+      } @else if (email?.errors?.['email']) {
+      <span>Invalid email!</span>
+      }
     </div>
+    }
 
     <div class="w-full mt-5 mb-1">
       <label class="text-[16px] font-Poppins text-black" htmlFor="password">
@@ -67,17 +70,15 @@
           aria-hidden="true"
         ></i>
       </div>
-      <div
-        class="text-red-500 text-sm mt-1"
-        *ngIf="password?.invalid && password?.touched"
-      >
-        <span *ngIf="password?.errors?.['required']"
-          >Please enter your password!</span
-        >
-        <span *ngIf="password?.errors?.['minlength']"
-          >Password must be at least 6 characters!</span
-        >
+      @if(password?.invalid && password?.touched) {
+      <div class="text-red-500 text-sm mt-1">
+        @if(password?.errors?.['required']) {
+        <span>Please enter your password!</span>
+        } @else if (password?.errors?.['minlength']) {
+        <span>Password must be at least 6 characters!</span>
+        }
       </div>
+      }
     </div>
     <div class="w-full mt-5">
       <input

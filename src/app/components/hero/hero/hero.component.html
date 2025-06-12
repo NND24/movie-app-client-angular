@@ -3,9 +3,11 @@
 >
   <div class="relative overflow-hidden max-h-screen mb-[-15.5%] h-full">
     <swiper [config]="config" class="mySwiper w-full h-full">
-      <ng-template swiperSlide *ngFor="let movie of items.slice(0, 8)">
-        <app-detail-hero [slug]="movie.slug" />
+      @for(movie of items().slice(0, 8); track $index) {
+      <ng-template swiperSlide>
+        <app-detail-hero [slug]="movie.slug" class="w-full" />
       </ng-template>
+      }
     </swiper>
   </div>
 </div>

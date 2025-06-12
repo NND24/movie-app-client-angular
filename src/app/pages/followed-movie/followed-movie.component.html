@@ -4,7 +4,11 @@
   class="w-[90%] m-auto mt-[60px] flex flex-wrap items-center text-white font-semibold"
 >
   <a [routerLink]="['/']" class="flex items-center gap-1 hover:text-[#1cc749]">
-    <i class="fa fa-home" aria-hidden="true"> </i>
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Example home icon"
+      fontIcon="home"
+    ></mat-icon>
     <span>Trang chủ</span>
   </a>
   <span class="px-2">/</span>
@@ -13,16 +17,16 @@
   </a>
 </div>
 
-<ng-container *ngIf="user; else noUserData">
+<ng-container *ngIf="user(); else noUserData">
   <div
-    *ngIf="user.followedMovie.length > 0; else noFollowedMovieData"
+    *ngIf="user().followedMovie.length > 0; else noFollowedMovieData"
     class="w-[90%] m-auto grid grid-cols-12 gap-[35px] mt-2"
   >
     <div class="col-span-12">
       <div
         class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-3 sm:gap-[20px] grid-cols-2 gap-[15px]"
       >
-        <div *ngFor="let slug of user.followedMovie">
+        <div *ngFor="let slug of user().followedMovie">
           <app-followed-movie-card [slug]="slug" />
         </div>
       </div>

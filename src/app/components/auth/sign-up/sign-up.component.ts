@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, output, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -12,15 +12,16 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [NgClass, NgIf, ReactiveFormsModule],
+  imports: [NgClass, ReactiveFormsModule],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent {
-  constructor(private authService: AuthService, private fb: FormBuilder) {}
+  private authService = inject(AuthService);
+  private fb = inject(FormBuilder);
 
-  @Output() closeSignUpEvent = new EventEmitter<boolean>();
-  @Output() openLoginEvent = new EventEmitter<boolean>();
+  closeSignUpEvent = output<boolean>();
+  openLoginEvent = output<boolean>();
   showPassword = false;
 
   closeSignUpModel() {

@@ -1,5 +1,5 @@
 import { NgFor, NgForOf, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
   genreItemsData,
@@ -10,7 +10,7 @@ import {
 @Component({
   selector: 'app-nav-items',
   standalone: true,
-  imports: [NgIf, NgFor, NgForOf, RouterModule],
+  imports: [RouterModule],
   templateUrl: './nav-items.component.html',
   styleUrl: './nav-items.component.css',
 })
@@ -19,7 +19,7 @@ export class NavItemsComponent {
   genreItems = genreItemsData;
   nationItems = nationItemsData;
 
-  @Input() isMobileTablet: any = false;
+  isMobileTablet = input<boolean>(false);
 
   openCatModal = false;
   openGenreModal = false;

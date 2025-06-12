@@ -1,5 +1,5 @@
 import { NgForOf, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, computed, inject, input, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MovieService } from '../../../services/movie.service';
 import { Movie } from '../../../models/IMovies';
@@ -7,49 +7,42 @@ import { RemoveHtmlTagsPipe } from '../../../pipes/remove-html-tags.pipe';
 import { UserService } from '../../../services/user.service';
 import Swal from 'sweetalert2';
 import { TrimPipe } from '../../../pipes/trim.pipe';
+import { StarComponent } from '../../star/star.component';
 
 @Component({
   selector: 'app-detail-hero',
   standalone: true,
   imports: [
     RouterModule,
-    NgIf,
-    NgForOf,
     RemoveHtmlTagsPipe,
     DetailHeroComponent,
     TrimPipe,
+    StarComponent,
   ],
   templateUrl: './detail-hero.component.html',
   styleUrl: './detail-hero.component.css',
 })
 export class DetailHeroComponent {
-  @Input() slug: string = '';
-  movie!: Movie;
-  user: any;
+  private userService = inject(UserService);
+  private movieService = inject(MovieService);
 
-  constructor(
-    private movieService: MovieService,
-    private userService: UserService
-  ) {}
+  slug = input<string>('');
+  movie!: Movie;
+  user = computed(() => this.userService.user());
 
   ngOnInit() {
-    this.movieService.getDetailMovie(this.slug).subscribe({
+    this.movieService.getDetailMovie(this.slug()).subscribe({
       next: (res) => {
         this.movie = res.movie;
       },
     });
-
-    this.userService.user$.subscribe((data) => {
-      this.user = data;
-    });
   }
 
   addToFollowed() {
-    if (this.user) {
-      this.userService.addMovieToFavorite(this.slug).subscribe({
+    if (this.user()) {
+      this.userService.addMovieToFavorite(this.slug()).subscribe({
         next: (res: any) => {
-          localStorage.setItem('user', JSON.stringify(res));
-          this.userService.setUser(res.user);
+          this.userService.setUser(res);
         },
         error: (res) => {
           console.log(res);

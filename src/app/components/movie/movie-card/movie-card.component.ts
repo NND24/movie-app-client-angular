@@ -1,26 +1,35 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, input, Input, signal } from '@angular/core';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { RemoveHtmlTagsPipe } from '../../../pipes/remove-html-tags.pipe';
 import { Movie } from '../../../models/IMovies';
 import { MovieService } from '../../../services/movie.service';
 import { RouterModule } from '@angular/router';
+import { StarComponent } from '../../star/star.component';
+import { StarPercentComponent } from '../../star-percent/star-percent.component';
 
 @Component({
   selector: 'app-movie-card',
   standalone: true,
-  imports: [NgIf, NgForOf, RemoveHtmlTagsPipe, RouterModule, NgClass],
+  imports: [
+    NgForOf,
+    RemoveHtmlTagsPipe,
+    RouterModule,
+    NgClass,
+    StarComponent,
+    StarPercentComponent,
+  ],
   templateUrl: './movie-card.component.html',
   styleUrl: './movie-card.component.css',
 })
 export class MovieCardComponent {
-  isHovered: boolean = false;
-  @Input() slug: string = '';
+  private movieService = inject(MovieService);
+
+  isHovered = signal<boolean>(false);
+  slug = input<string>('');
   movie!: Movie;
 
-  constructor(private movieService: MovieService) {}
-
   ngOnInit() {
-    this.movieService.getDetailMovie(this.slug).subscribe({
+    this.movieService.getDetailMovie(this.slug()).subscribe({
       next: (res) => {
         this.movie = res.movie;
       },
@@ -28,11 +37,11 @@ export class MovieCardComponent {
   }
 
   handleMouseEnter() {
-    this.isHovered = true;
+    this.isHovered.set(true);
   }
 
   handleMouseLeave() {
-    this.isHovered = false;
+    this.isHovered.set(false);
   }
 
   addToFollowed() {}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header/header.component';
 import { HeroComponent } from '../../components/hero/hero/hero.component';
 import { MovieService } from '../../services/movie.service';
@@ -7,7 +7,7 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule, NgForOf, NgIf } from '@angular/common';
 import { MovieSliderComponent } from '../../components/movie/movie-slider/movie-slider.component';
 import { MovieCategoryResponse } from '../../models/IMovies';
-import { forkJoin, Subscription } from 'rxjs';
+import { forkJoin, Subject, Subscription, takeUntil } from 'rxjs';
 import { FooterComponent } from '../../components/footer/footer.component';
 
 @Component({
@@ -20,8 +20,6 @@ import { FooterComponent } from '../../components/footer/footer.component';
     MovieSliderComponent,
     FooterComponent,
     RouterModule,
-    NgForOf,
-    NgIf,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -41,10 +39,12 @@ export class HomeComponent {
   movieByCategorySubscription!: Subscription;
   movieByGenreSubscription!: Subscription;
 
-  constructor(private movieService: MovieService, private router: Router) {}
+  private destroy$ = new Subject<void>();
+  private movieService = inject(MovieService);
+  private router = inject(Router);
 
   ngOnInit() {
-    this.router.events.subscribe((event) => {
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if (event instanceof NavigationEnd) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }

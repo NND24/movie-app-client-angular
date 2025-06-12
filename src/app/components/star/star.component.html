@@ -1,0 +1,7 @@
+@for (star of stars; track $index) { @if (isFullStar($index)) {
+<i class="fa fa-star text-[#1cc749]" aria-hidden="true"></i>
+} @else if (isHalfStar($index)) {
+<i class="fa fa-star-half-o text-[#1cc749]" aria-hidden="true"></i>
+} @else {
+<i class="fa fa-star text-gray-300" aria-hidden="true"></i>
+} }

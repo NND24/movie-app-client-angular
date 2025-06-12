@@ -44,13 +44,15 @@
       >
         <img
           [src]="
-            user.avatar.url ? user.avatar.url : '../../public/defaultAvatar.png'
+            user().avatar.url
+              ? user().avatar.url
+              : '../../public/defaultAvatar.png'
           "
           alt="avatar"
           class="w-[30px] h-[30px] object-cover rounded-full"
         />
         <span class="text-[17px] font-Poppins font-medium text-[#e0e0e0]">{{
-          user.name
+          user().name
         }}</span>
       </div>
 

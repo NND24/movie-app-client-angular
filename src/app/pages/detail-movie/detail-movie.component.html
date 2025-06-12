@@ -2,152 +2,146 @@
 
 <app-hero-detail-movie [slug]="slug" />
 
-<ng-container *ngIf="movie">
-  <div class="w-[90%] m-auto pt-2" *ngIf="separatedData">
-    <div *ngFor="let entry of separatedEntries" class="py-3">
-      <p
-        class="text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] text-[18px] font-semibold pb-2"
-      >
-        Danh sách tập: {{ entry.serverName }}
-      </p>
+@if(movie) { @if(separatedData) {
+<div class="w-[90%] m-auto pt-2">
+  <div *ngFor="let entry of separatedEntries" class="py-3">
+    <p
+      class="text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] text-[18px] font-semibold pb-2"
+    >
+      Danh sách tập: {{ entry.serverName }}
+    </p>
 
-      <div class="max-h-[160px] scroll-auto overflow-auto small-scrollbar">
-        <div
-          class="grid gap-2"
-          style="grid-template-columns: repeat(auto-fill, minmax(80px, 1fr))"
+    <div class="max-h-[160px] scroll-auto overflow-auto small-scrollbar">
+      <div
+        class="grid gap-2"
+        style="grid-template-columns: repeat(auto-fill, minmax(80px, 1fr))"
+      >
+        <a
+          *ngFor="let e of entry.episodes"
+          [routerLink]="['/phim', slug, e.name]"
+          [queryParams]="{ 'server-name': entry.serverName, server: 1 }"
+          (click)="addHistory(e.name)"
+          [ngClass]="{
+            'rounded-[4px] py-1 text-white font-semibold cursor-pointer text-center': true,
+            '!bg-[#4a4a4aab]': watchedMovieItem.watched_eps.includes(e.name),
+            'bg-[#0A0C0F]': !watchedMovieItem.watched_eps.includes(e.name),
+            'hover:bg-[#1cc749]': true
+          }"
         >
-          <a
-            *ngFor="let e of entry.episodes"
-            [routerLink]="['/phim', slug, e.name]"
-            [queryParams]="{ 'server-name': entry.serverName, server: 1 }"
-            (click)="addHistory(e.name)"
-            [ngClass]="{
-              'rounded-[4px] py-1 text-white font-semibold cursor-pointer text-center': true,
-              '!bg-[#4a4a4aab]': watchedMovieItem.watched_eps.includes(e.name),
-              'bg-[#0A0C0F]': !watchedMovieItem.watched_eps.includes(e.name),
-              'hover:bg-[#1cc749]': true
-            }"
-          >
-            {{ e.name }}
-          </a>
-        </div>
+          {{ e.name }}
+        </a>
       </div>
     </div>
   </div>
+</div>
+}
 
-  <div class="w-[90%] mx-auto h-[1px] bg-[#26252a] my-2 block sm:hidden"></div>
+<div class="w-[90%] mx-auto h-[1px] bg-[#26252a] my-2 block sm:hidden"></div>
 
-  <div class="w-[90%] m-auto block sm:hidden">
-    <h1
-      class="font-bold text-[30px] text-[#e0e0e0] text-left drop-shadow-[1px_1px_1px_#000]"
-    >
-      {{ movie.movie.name }}
-    </h1>
-    <p class="font-bold text-[#e0e0e0] pb-1 drop-shadow-[1px_1px_1px_#000]">
-      {{ movie.movie.origin_name }}
-    </p>
-    <div
-      class="text-[14px] text-[#e0e0e0] text-left drop-shadow-[1px_1px_1px_#000] my-2 flex flex-wrap items-center gap-[4px] sm:gap-[6px]"
-    >
-      <ng-container *ngIf="movie.movie.tmdb.vote_average > 0">
-        <div class="font-medium inline-flex items-center gap-1">
-          <i class="fa fa-star text-[#1cc749]" aria-hidden="true"></i>
-          <span>
-            {{ movie.movie.tmdb.vote_average }} /
-            {{ movie.movie.tmdb.vote_count }} đánh giá
-          </span>
-        </div>
-        <span class="">•</span>
-      </ng-container>
-      <a
-        [routerLink]="['/danh-sach/phim-moi']"
-        [queryParams]="{ page: 1, year: movie.movie.year }"
-        class="font-medium"
-      >
-        {{ movie.movie.year }}
-      </a>
-      <span class="">•</span>
-      <span
-        class="font-medium border-[#e0e0e0] border-[1px] border-solid rounded-[30px] px-[8px]"
-      >
-        @if(movie.movie.status === "completed"){ Hoàn tất } @else { Đang chiếu }
+<div class="w-[90%] m-auto block sm:hidden">
+  <h1
+    class="font-bold text-[30px] text-[#e0e0e0] text-left drop-shadow-[1px_1px_1px_#000]"
+  >
+    {{ movie.movie.name }}
+  </h1>
+  <p class="font-bold text-[#e0e0e0] pb-1 drop-shadow-[1px_1px_1px_#000]">
+    {{ movie.movie.origin_name }}
+  </p>
+  <div
+    class="text-[14px] text-[#e0e0e0] text-left drop-shadow-[1px_1px_1px_#000] my-2 flex flex-wrap items-center gap-[4px] sm:gap-[6px]"
+  >
+    @if(movie.movie.tmdb.vote_average > 0) {
+    <div class="font-medium inline-flex items-center gap-1">
+      <i class="fa fa-star text-[#1cc749]" aria-hidden="true"></i>
+      <span>
+        {{ movie.movie.tmdb.vote_average }} /
+        {{ movie.movie.tmdb.vote_count }} đánh giá
       </span>
-      <span class="">•</span>
-      <span class="font-medium">{{ movie.movie.time }}</span>
-      <ng-container *ngIf="movie.movie.view > 0">
-        <span class="">•</span>
-        <div class="font-medium inline-flex items-center gap-1">
-          <i class="fa fa-eye" aria-hidden="true"></i>
-          <span>{{ movie.movie.view }}</span>
-        </div>
-      </ng-container>
-
-      <ng-container
-        *ngIf="movie.movie.country && movie.movie.country.length > 0"
-      >
-        <span class="">•</span>
-        <a
-          *ngFor="let country of movie.movie.country"
-          [routerLink]="['/quoc-gia', country.slug]"
-          [queryParams]="{ page: 1 }"
-          class="mr-[4px] sm:mr-[6px] font-medium border-[#e0e0e0] border-[1px] border-solid rounded-[30px] px-[8px]"
-        >
-          {{ country.name }}
-        </a>
-      </ng-container>
     </div>
-
-    <div
-      *ngIf="movie.movie.category && movie.movie.category.length > 0"
-      class="flex gap-[8px] py-2 flex-wrap w-full"
+    <span class="">•</span>
+    }
+    <a
+      [routerLink]="['/danh-sach/phim-moi']"
+      [queryParams]="{ page: 1, year: movie.movie.year }"
+      class="font-medium"
     >
-      <a
-        *ngFor="let cat of movie.movie.category"
-        [routerLink]="['/the-loai', cat.slug]"
-        [queryParams]="{ page: 1 }"
-        class="px-[6px] rounded-[2px] color-[#ececec] bg-[#ffffff14] text-[14px] font-medium text-white w-max h-full shadow-[rgba(0,0,0,0.5)_0px_1px_2px]"
-      >
-        {{ cat.name }}
-      </a>
-    </div>
-
-    <div class="mt-[4px]">
-      <p
-        *ngIf="movie.movie.director && movie.movie.director[0].length > 0"
-        class="text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] text-left"
-      >
-        Đạo diễn:
-        <a
-          *ngFor="let name of movie.movie.director"
-          [routerLink]="['/tim-kiem', name]"
-          [queryParams]="{ page: 1 }"
-          >{{ name }},</a
-        >
-      </p>
-      <p
-        *ngIf="movie.movie.actor && movie.movie.actor[0].length > 0"
-        class="text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] text-left"
-      >
-        Diễn viên:
-        <a
-          *ngFor="let name of movie.movie.actor"
-          [routerLink]="['/tim-kiem', name]"
-          [queryParams]="{ page: 1 }"
-          >{{ name }},</a
-        >
-      </p>
-    </div>
-    <p
-      class="text-justify mt-[4px] text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] leading-[22px]"
+      {{ movie.movie.year }}
+    </a>
+    <span class="">•</span>
+    <span
+      class="font-medium border-[#e0e0e0] border-[1px] border-solid rounded-[30px] px-[8px]"
     >
-      {{ movie.movie.content | removeHtmlTags }}
-    </p>
+      @if(movie.movie.status === "completed"){ Hoàn tất } @else { Đang chiếu }
+    </span>
+    <span class="">•</span>
+    <span class="font-medium">{{ movie.movie.time }}</span>
+    @if(movie.movie.view > 0) {
+    <span class="">•</span>
+    <div class="font-medium inline-flex items-center gap-1">
+      <i class="fa fa-eye" aria-hidden="true"></i>
+      <span>{{ movie.movie.view }}</span>
+    </div>
+    } @if(movie.movie.country && movie.movie.country.length > 0) {
+    <span class="">•</span>
+    <a
+      *ngFor="let country of movie.movie.country"
+      [routerLink]="['/quoc-gia', country.slug]"
+      [queryParams]="{ page: 1 }"
+      class="mr-[4px] sm:mr-[6px] font-medium border-[#e0e0e0] border-[1px] border-solid rounded-[30px] px-[8px]"
+    >
+      {{ country.name }}
+    </a>
+    }
   </div>
-</ng-container>
+
+  @if(movie.movie.category && movie.movie.category.length > 0) {
+  <div class="flex gap-[8px] py-2 flex-wrap w-full">
+    <a
+      *ngFor="let cat of movie.movie.category"
+      [routerLink]="['/the-loai', cat.slug]"
+      [queryParams]="{ page: 1 }"
+      class="px-[6px] rounded-[2px] color-[#ececec] bg-[#ffffff14] text-[14px] font-medium text-white w-max h-full shadow-[rgba(0,0,0,0.5)_0px_1px_2px]"
+    >
+      {{ cat.name }}
+    </a>
+  </div>
+  } @if(movie.movie.director && movie.movie.director[0].length > 0) {
+  <div class="mt-[4px]">
+    <p class="text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] text-left">
+      Đạo diễn:
+      <a
+        *ngFor="let name of movie.movie.director"
+        [routerLink]="['/tim-kiem', name]"
+        [queryParams]="{ page: 1 }"
+        >{{ name }},</a
+      >
+    </p>
+    @if(movie.movie.actor && movie.movie.actor[0].length > 0) {
+    <p class="text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] text-left">
+      Diễn viên:
+      <a
+        *ngFor="let name of movie.movie.actor"
+        [routerLink]="['/tim-kiem', name]"
+        [queryParams]="{ page: 1 }"
+        >{{ name }},</a
+      >
+    </p>
+    }
+  </div>
+  }
+  <p
+    class="text-justify mt-[4px] text-[#e0e0e0] drop-shadow-[1px_1px_1px_#000] leading-[22px]"
+  >
+    {{ movie.movie.content | removeHtmlTags }}
+  </p>
+</div>
+}
 
 <div class="w-[90%] mx-auto h-[1px] bg-[#26252a] my-2"></div>
 
-<app-comment *ngIf="slug" [slug]="slug" />
+@if(slug) {
+<app-comment [slug]="slug" />
+}
 
 <div class="w-[90%] mx-auto h-[1px] bg-[#26252a] my-2"></div>
 

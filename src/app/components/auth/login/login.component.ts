@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, output, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [NgClass, NgIf, ReactiveFormsModule],
+  imports: [NgClass, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -27,8 +27,8 @@ export class LoginComponent {
     private toastr: ToastrService
   ) {}
 
-  @Output() closeLoginEvent = new EventEmitter<boolean>();
-  @Output() openSignUpEvent = new EventEmitter<boolean>();
+  closeLoginEvent = output<boolean>();
+  openSignUpEvent = output<boolean>();
   showPassword: boolean = false;
 
   closeLoginModel() {
@@ -71,8 +71,7 @@ export class LoginComponent {
 
     this.authService.login(email, password).subscribe({
       next: (res: any) => {
-        localStorage.setItem('user', JSON.stringify(res));
-        this.userService.setUser(res.user);
+        this.userService.setUser(res);
         this.closeLoginEvent.emit(false);
         Swal.fire('Đăng nhập thành công!', '', 'success');
       },

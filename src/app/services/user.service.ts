@@ -1,91 +1,64 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { BehaviorSubject, retry } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
-  private userSubject = new BehaviorSubject<any>(null);
-  public user$ = this.userSubject.asObservable();
+  private _user = signal<any>(this.getUserFromStorage());
+  readonly user = this._user.asReadonly();
 
   setUser(user: any) {
-    this.userSubject.next(user);
+    this._user.set(user.user);
+    localStorage.setItem('user', JSON.stringify(user));
   }
 
   clearUser() {
-    this.userSubject.next(null);
+    this._user.set(null);
+    localStorage.removeItem('user');
   }
 
-  getUser() {
-    return this.userSubject.getValue();
-  }
-
-  private getAuthHeaders(): { headers?: HttpHeaders } {
-    const tokenData = localStorage.getItem('user');
-    if (tokenData) {
-      try {
-        const token = JSON.parse(tokenData)?.accessToken;
-        if (token) {
-          return {
-            headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
-          };
-        }
-      } catch (_) {
-        console.warn('Invalid token data in localStorage');
-      }
+  private getUserFromStorage(): any {
+    try {
+      return JSON.parse(localStorage.getItem('user') || 'null').user;
+    } catch (error) {
+      return null;
     }
-    return {};
   }
 
   updateAvatar(avatar: string) {
-    return this.http.put(
-      `${environment.apiUrl}/update-user-avatar`,
-      { avatar },
-      this.getAuthHeaders()
-    );
+    return this.http.put(`${environment.apiUrl}/update-user-avatar`, {
+      avatar,
+    });
   }
 
   editProfile(name: string) {
-    return this.http.put(
-      `${environment.apiUrl}/update-user-info`,
-      { name },
-      this.getAuthHeaders()
-    );
+    return this.http.put(`${environment.apiUrl}/update-user-info`, { name });
   }
 
   updatePassword(oldPassword: string, newPassword: string) {
-    return this.http.put(
-      `${environment.apiUrl}/update-user-password`,
-      { oldPassword, newPassword },
-      this.getAuthHeaders()
-    );
+    return this.http.put(`${environment.apiUrl}/update-user-password`, {
+      oldPassword,
+      newPassword,
+    });
   }
 
   addMovieToFavorite(slug: string) {
-    return this.http.put(
-      `${environment.apiUrl}/addFollowedMovie`,
-      { slug },
-      this.getAuthHeaders()
-    );
+    return this.http.put(`${environment.apiUrl}/addFollowedMovie`, { slug });
   }
 
   removeMovieFromFavorite(slug: string) {
-    return this.http.put(
-      `${environment.apiUrl}/removeFollowedMovie`,
-      { slug },
-      this.getAuthHeaders()
-    );
+    return this.http.put(`${environment.apiUrl}/removeFollowedMovie`, { slug });
   }
 
   addToHistory(movie_slug: string, ep: string) {
-    return this.http.put(
-      `${environment.apiUrl}/addToHistory`,
-      { movie_slug, ep },
-      this.getAuthHeaders()
-    );
+    return this.http.put(`${environment.apiUrl}/addToHistory`, {
+      movie_slug,
+      ep,
+    });
   }
 }

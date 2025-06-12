@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { HeaderComponent } from '../../header/header/header.component';
 import { NgIf } from '@angular/common';
 import { UserService } from '../../../services/user.service';
@@ -19,7 +25,7 @@ import Swal from 'sweetalert2';
   styleUrl: './change-profile.component.css',
 })
 export class ChangeProfileComponent {
-  user: any;
+  user = computed(() => this.userService.user());
   @Output() changeEvent = new EventEmitter<boolean>(false);
   profileForm!: FormGroup;
   avatar!: string;
@@ -28,22 +34,28 @@ export class ChangeProfileComponent {
     private userService: UserService,
     private router: Router,
     private fb: FormBuilder
-  ) {}
+  ) {
+    this.profileForm = this.fb.group({
+      name: ['', [Validators.required]],
+      email: [''],
+    });
+
+    effect(() => {
+      const user = this.user();
+      if (user) {
+        this.profileForm.patchValue({
+          name: user.name,
+          email: user.email,
+        });
+      }
+    });
+  }
 
   ngOnInit() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    });
-
-    this.userService.user$.subscribe((data: any) => {
-      this.user = data;
-
-      this.profileForm = this.fb.group({
-        name: [data.name, [Validators.required]],
-        email: [data.email],
-      });
     });
   }
 

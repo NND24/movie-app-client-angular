@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { DetailHeroComponent } from '../detail-hero/detail-hero.component';
 
 @Component({
@@ -9,5 +9,5 @@ import { DetailHeroComponent } from '../detail-hero/detail-hero.component';
   styleUrl: './hero-detail-movie.component.css',
 })
 export class HeroDetailMovieComponent {
-  @Input() slug: string = '';
+  slug = input<string>('');
 }
